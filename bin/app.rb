@@ -1,4 +1,5 @@
 require 'sinatra'
+require 'pony'
 
 set :port, 8080
 set :static, true
@@ -6,16 +7,21 @@ set :public_folder, "static"
 set :views, "views"
 
 get '/' do
-  return "Hello World"
+  erb :email_form
 end
 
-get '/hello/' do
-  erb :hello_form
+post '/' do
+  Pony.mail({
+    :to => "info@misdepartment.com",
+    :from => params[:email],
+    :subject => "Inquiry from MIS Department website",
+    :body => "From: " + params[:name] + "
+    Message: " + params[:body],
+    :via => :smtp
+    })
+  redirect '/success'
 end
 
-post '/hello/' do
-  greeting = params[:greeting] || "Hi There"
-  name = params[:name] || "Nobody"
-
-  erb :index, :locals => {"greeting" => greeting, "name" => name}
+get '/success' do
+  erb :index
 end
