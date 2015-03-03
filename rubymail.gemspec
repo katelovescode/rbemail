@@ -3,7 +3,7 @@ lib = File.expand_path('../lib',__FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 
 Gem::Specification.new do |spec|
-  spec.name           = "rubymail"
+  spec.name           = "rbemail"
   spec.version        = '1.0'
   spec.authors        = ["Kate Klemp"]
   spec.email          = ["kklemp@misdepartment.com"]
@@ -12,8 +12,8 @@ Gem::Specification.new do |spec|
   spec.homepage       = "http://www.misdepartment.com/"
   spec.license        = "MIT"
 
-  spec.files          = ['lib/rubymail.rb']
-  spec.executables    = ['bin/rubymail']
-  spec.test_files     = ['tests/test_rubymail.rb']
+  spec.files          = ['lib/rbemail.rb']
+  spec.executables    = ['bin/rbemail']
+  spec.test_files     = ['tests/test_rbemail.rb']
   spec.require_paths  = ["lib"]
 end
