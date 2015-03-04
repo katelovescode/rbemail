@@ -11,6 +11,8 @@ get '/' do
 end
 
 post '/' do
+  validates_format_of params[:email], :with => /@/
+
   Pony.mail({
     :to => "info@misdepartment.com",
     :from => params[:email],
