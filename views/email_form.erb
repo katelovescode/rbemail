@@ -1,8 +1,8 @@
 <form action="/" method="POST">
-  Name: <input type="text" name="name" required />
+  Name: <input type="text" name="name" /><%= @nerror %>
   <br />
-  Email: <input type="text" name="email" required />
+  Email: <input type="text" name="email" /><%= @eerror %>
   <br />
-  Message: <textarea rows="5" columns="25" name = "body" required /></textarea>
-  <input type="submit" />
+  Message: <textarea rows="5" columns="25" name = "body" /></textarea><%= @berror %>
+  <button type="submit">Submit</button>
 </form>
