@@ -12,34 +12,49 @@ end
 
 post '/' do
 
+  # create a variable for each form field
+  # name = "submitted[your_name]".to_sym
+  # email = "submitted[your_e_mail_address]".to_sym
+  # subject = "submitted[subject]".to_sym
+  # reason = "submitted[reason_for_contact]".to_sym
+  # message = "submitted[message]".to_sym
+
+  reqparams = [:name, :email, :subject, :reason, :message]
+  responses = []
+
+  reqparams.each do |r|
+    unless r.nil?
+      responses.push([r,true])
+    end
+  end
+
+  puts responses
+
+  to = "info@misdepartment.com"
   name = params[:name]
-  email = params[:email]
-  body = params[:body]
-  nerror = ""
-  eerror = ""
-  berror = ""
+  from = params[:email]
+  subject = params[:subject]
+  reason = params[:reason]
+  mailbody = [
+    :reason,
+    :message
+  ]
 
-  if name == ""
-    nerror = "Please enter your name."
-  elsif email == ""
-    eerror = "Please enter your email address."
-  elsif body == ""
-    berror = "Please enter a message."
-  end
+  # loop through all body variables and concatenate to string with \n in between
+  # unless
+  #   mailbody.each do |e|
+  #     body << params[e]
+  #   end
+  # end
 
-  if !(name == "" || email == "" || body == "")
-    Pony.mail({
-      :to => "info@misdepartment.com",
-      :from => email,
-      :subject => "Inquiry from MIS Department website",
-      :body => "From: " + name + "
-      Message: " + body,
-      :via => :smtp
-      })
-    redirect '/success'
-  end
-end
+  # validate name, email and body
 
-get '/success' do
-  erb :index
+  # if validation passes
+
+  Pony.mail({
+    to: to,
+    from: from,
+    subject: subject,
+    body: body
+  })
 end
