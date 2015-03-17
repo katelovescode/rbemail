@@ -15,6 +15,7 @@ set :views, "views"
 # while true; do curl --data "submitted[your_name]=kate&submitted[your_e_mail_address]=kklemp@misdepartment.com&submitted[subject]=what&submitted[reason_for_contact]=becuz" http://localhost:9393; sleep 5; done
 
 get '/' do
+  # this is for testing non-drupal form names
   # erb :email_form
   erb :drupal_form
 end
