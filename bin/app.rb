@@ -1,5 +1,6 @@
 require 'sinatra'
 require 'pony'
+require 'json'
 require_relative "config.rb"
 
 # ruby configs
@@ -9,7 +10,7 @@ set :public_folder, "static"
 set :views, "views"
 
 ########################################
-# TESTING COMMANDS
+# TESTING CONSOLE COMMANDS
 ########################################
 
 # this will die (9393 port - shotgun)
@@ -22,12 +23,13 @@ set :views, "views"
 # while true; do curl --data "name=kate&email=kklemp@misdepartment.com&subject=what&reason=becuz" http://localhost:9393; sleep 10; done
 
 ########################################
-# TESTING ERB TEMPLATES W/ FORMS
+# TESTING ERB TEMPLATES W/ FORMS - USING BROWSER
 ########################################
 
 get '/' do
   # this is for testing non-drupal form names
   erb :email_form
+
   # erb :drupal_form
 end
 
@@ -49,7 +51,12 @@ post '/' do
   from = ""
   subject = ""
   body = ""
+  $symbols = []
+  $entries = []
+  $combine = []
   $allfields = []
+  $hashfields = []
+  $h = {}
 
   ########################################
   # FIELD CLASS
@@ -60,16 +67,14 @@ post '/' do
       @name, @value, @required, @title = args
     end
 
-    def show # display all elements in the class object
-      puts "Name: " + @name
-      puts "Value: " + @value
-      puts "Required: " + @required
-      puts "Title: " + @title
+    def add # add all form values that are aggregated from the form input to an allfields array to be used for validation and submission
+      $symbols = ["name", "value", "required", "title"] # for generating JSON objects
+      $entries = [@name, @value, @required, @title] # for generating JSON objects and email fields
+      $h = Hash[$symbols.zip($entries)] # turn each field's components into a hash
+      $allfields.push($entries) # push all field entries to be processed and sent w/ Pony
+      $hashfields.push($h) # push all field entries in an array of hashes to be output as JSON
     end
 
-    def add # add all form values that are aggregated from the form input to an allfields array to be used for validation and submission
-      $allfields.push([@name,@value,@required,@title])
-    end
   end
 
   ########################################
@@ -95,7 +100,7 @@ post '/' do
   form.each do |k,v|
 
     # initialize required and found variables
-    r, found = false
+    r, found = false, false
 
     # "Prettify" the title - take out any HTML tag spacing punctuation and change to spaces, capitalize to make it more readable
     t = k.split(/[[:punct:]]/).map(&:capitalize).join(' ')
@@ -103,7 +108,7 @@ post '/' do
     # if this form field is in the $required list in config, mark it as found, change the required value to true
     $required.each do |x|
       if k == x
-        r, found = true
+        r, found = true, true
       end
     end
 
@@ -189,8 +194,24 @@ post '/' do
   end
 
   ########################################
+  # WRITE TO JSON
+  ########################################
+
+  $j = $hashfields.to_json
+
+  # for testing the JSON output in the terminal, uncomment to see prettified JSON
+  # $parsed = JSON.parse($j)
+  # puts JSON.pretty_generate($parsed)
+
+  File.open("data/temp.json","w") do |f|
+    f.write($j)
+  end
+
+  ########################################
   # AFTER ALL VALIDATION, KILL OR PASS
   ########################################
+
+  puts formstatus
 
   if formstatus == false
     # output JSON and AJAX call - still need Sunil's help on this
@@ -204,7 +225,7 @@ post '/' do
       subject: subject,
       body: body
       })
-    end
+  end
 
  return true
 
