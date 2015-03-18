@@ -45,6 +45,10 @@ post '/' do
   # global variables and empty arrays
   formstatus = true # used to test for validations and kill if not passed
   form = []
+  to = ""
+  from = ""
+  subject = ""
+  body = ""
   $allfields = []
 
   ########################################
@@ -84,7 +88,7 @@ post '/' do
   end
 
   ########################################
-  # PROCESS FORM FIELDS THROUGH CONFIG (REQUIRED/OPTIONAL, TITLE)
+  # PROCESS FORM FIELDS SUBMITTED (ADDS REQUIRED/OPTIONAL, TITLE)
   ########################################
 
   # loop through the form variable and add in required and title elements
@@ -113,24 +117,28 @@ post '/' do
 
     # if this form field is in neither list, kill it with an error message
     if found == false
-      # kill it with fire, alert the developer that they forgot to put their form fields in their configuration file
+      # alert the developer that they forgot to put their form fields in their configuration file
       puts "Form field '#{k}' is not listed in config.rb, please go back and add it to the configuration file."
       formstatus = false
     end
 
+    # create a field object and add it to the $allfields array using the method above
     Field.new(k,v,r,t).add
 
   end
 
   ########################################
-  # VALIDATE FORM FIELDS
+  # LOOP THROUGH ALL PROCESSED FIELDS
   ########################################
 
-  # make sure required fields are actually filled out
   $allfields.each do |arr|
 
     # explode the array into named variables
     nme, val, req, ttl = arr[0], arr[1], arr[2], arr[3]
+
+    ########################################
+    # VALIDATIONS
+    ########################################
 
     # test to make sure required fields are filled out
     if req == true && val == ""
@@ -146,86 +154,57 @@ post '/' do
       end
     end
 
+    ########################################
+    # ASSIGN PONY FIELDS
+    ########################################
+
+    # check $f_to variable in config; if it's not a list of email addresses, get the value like any other form field
+    $f_to.each do |x|
+      if x[/\A([\w+\-].?)+@[a-z\d\-]+(\.[a-z]+)*\.[a-z]+\z/i] == nil
+        if nme == $f_to
+          to = val
+        end
+      else
+        to = $f_to.join(',')
+      end
+    end
+
+    # if this is the same as the $f_from variable, get the value
+    if nme == $f_from
+      from = val
+    end
+
+    # if this is the same as the $f_subject variable, get the value
+    if nme == $f_subject
+      subject = val
+    end
+
+    # combine all body fields in the config file with line breaks
+    $f_body.each do |x|
+      if nme == x
+        body << ttl + ": " + val + "\n"
+      end
+    end
+
   end
 
-  puts formstatus
-  #
-  # ########################################
-  # # VALIDATE SPECIFIC FIELDS HERE
-  # ########################################
-  #
-  # # HTML name tags of your field here
-  # email = "your_e_mail_address"
-  #
-  # testemail = fields.select { |a| a[0] == email }
-  # testemail.each do |t|
-  #   emltest = t[3]
-  #   # uncomment below to test non-passable email
-  #   # emltest = "this"
-  #   if emltest[/\A([\w+\-].?)+@[a-z\d\-]+(\.[a-z]+)*\.[a-z]+\z/i] == nil
-  #     formstatus = false
-  #   end
-  # end
-  #
-  # ########################################
-  # # AFTER ALL VALIDATION, KILL OR PASS
-  # ########################################
-  #
-  # # kill switch if anything passes a false formstatus
-  # if formstatus == false
-  #   # puts "kill it all"
-  # end
-  #
-  # # pony mail if everything passes a true formstatus
-  # if formstatus == true
-  #   # puts "go for it"
-  #
-  #   ########################################
-  #   # SET PONY FIELDS
-  #   ########################################
-  #
-  #   ffield = fields.select { |a| a[2] == "from" }
-  #   ffield.each do |f|
-  #     from = f[3]
-  #   end
-  #   sfield = fields.select { |a| a[2] == "subject" }
-  #   sfield.each do |s|
-  #     subject = s[3]
-  #   end
-  #   bfields = fields.select { |a| a[2] == "body" }
-  #   bfields.each do |b|
-  #     body << b[0].to_s + ": " + b[3].to_s + "\n"
-  #   end
-  #
-  #   # puts "From: " + from
-  #   # puts "To: " + to
-  #   # puts "Subject: " + subject
-  #   # puts "Body: " + body
-  #
-  # end
+  ########################################
+  # AFTER ALL VALIDATION, KILL OR PASS
+  ########################################
 
- # # if all fields are OK, Pony.mail, if not, don't mail but send JSON
- # # return file data as JSON - show success or specific failed fields
- #
- #
- #    # use the below as an example to concatenate string
- #
- #    # loop through all body variables and concatenate to string with \n in between
- #    # unless
- #    #   mailbody.each do |e|
- #    #     body << params[e]
- #    #   end
- #    # end
- #
- #
- #    # use the below to send mail
- #
- #    # Pony.mail({
- #    #   to: to,
- #    #   from: from,
- #    #   subject: subject,
- #    #   body: body
- #    # })
+  if formstatus == false
+    # output JSON and AJAX call - still need Sunil's help on this
+    puts "kill it all"
+  end
+
+  if formstatus == true
+    Pony.mail({
+      to: to,
+      from: from,
+      subject: subject,
+      body: body
+      })
+    end
 
  return true
 

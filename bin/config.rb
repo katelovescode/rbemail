@@ -11,10 +11,10 @@ $botcatch = ["empty"] # if this field is filled out, we will know the form was s
 # PONY FIELD MAPPING
 ########################################
 
-$f_to = "info@misdepartment.com" # hard-coded destination address or field name (use anchor tag NAME attribute)
-$f_from = "your_e_mail_address" # form user's email address field (use anchor tag NAME attribute)
-$f_subject = "subject" # email subject field (use anchor tag NAME attribute)
-$f_body = ["reason_for_contact","message"] # all fields that need to go into the email body (use anchor tag NAME attribute)
+$f_to = ["info@misdepartment.com"] # hard-coded destination addresses or destination address form field (can be an array) (use anchor tag NAME attribute)
+$f_from = "your_e_mail_address" # user's email address form field (use anchor tag NAME attribute)
+$f_subject = "subject" # hard-coded subject or subject form field (use anchor tag NAME attribute)
+$f_body = ["reason_for_contact","message"] # all form fields that need to go into the email body (use anchor tag NAME attribute)
 
 ########################################
 # SPECIAL FORM FIELD NAME CONFIGURATIONS
