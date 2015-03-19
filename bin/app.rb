@@ -10,30 +10,6 @@ set :public_folder, "static"
 set :views, "views"
 
 ########################################
-# TESTING CONSOLE COMMANDS
-########################################
-
-# this will die (9393 port - shotgun)
-# while true; do curl --data "submitted[your_name]=kate&submitted[your_e_mail_address]=kklemp@misdepartment.com&submitted[subject]=what" http://localhost:9393; sleep 10; done
-
-# this will pass (9393 port - shotgun)
-# while true; do curl --data "submitted[your_name]=kate&submitted[your_e_mail_address]=kklemp@misdepartment.com&submitted[subject]=what&submitted[reason_for_contact]=becuz" http://localhost:9393; sleep 10; done
-
-# form params with no drupal submitted array (9393 port - shotgun)
-# while true; do curl --data "name=kate&email=kklemp@misdepartment.com&subject=what&reason=becuz" http://localhost:9393; sleep 10; done
-
-########################################
-# TESTING ERB TEMPLATES W/ FORMS - USING BROWSER
-########################################
-
-get '/' do
-  # this is for testing non-drupal form names
-  erb :email_form
-
-  # erb :drupal_form
-end
-
-########################################
 # FORM POST ACTION
 ########################################
 
@@ -45,36 +21,24 @@ post '/' do
   ########################################
 
   # global variables and empty arrays
-  formstatus = true # used to test for validations and kill if not passed
   form = []
   to = ""
   from = ""
   subject = ""
   body = ""
-  $symbols = []
-  $entries = []
-  $combine = []
-  $allfields = []
   $hashfields = []
-  $h = {}
+  $tomails = []
 
   ########################################
-  # FIELD CLASS
+  # FIELD FUNCTION
   ########################################
 
-  class Field # set up a class to process each form field into an object
-    def initialize(*args) #initialize the object with name, value, required and title elements
-      @name, @value, @required, @title = args
-    end
-
-    def add # add all form values that are aggregated from the form input to an allfields array to be used for validation and submission
-      $symbols = ["name", "value", "required", "title"] # for generating JSON objects
-      $entries = [@name, @value, @required, @title] # for generating JSON objects and email fields
-      $h = Hash[$symbols.zip($entries)] # turn each field's components into a hash
-      $allfields.push($entries) # push all field entries to be processed and sent w/ Pony
-      $hashfields.push($h) # push all field entries in an array of hashes to be output as JSON
-    end
-
+  def field(*args) # set up a class to process each form field into an object
+    @name, @value, @required, @title, @formpass = args
+    $symbols = ["name", "value", "required", "title", "formpass"] # for generating JSON objects
+    $entries = [@name, @value, @required, @title, @formpass] # for generating JSON objects and email fields
+    $h = Hash[$symbols.zip($entries)] # turn each field's components into a hash
+    $hashfields.push($h) # push all field entries in an array of hashes to be output as JSON
   end
 
   ########################################
@@ -93,140 +57,106 @@ post '/' do
   end
 
   ########################################
-  # PROCESS FORM FIELDS SUBMITTED (ADDS REQUIRED/OPTIONAL, TITLE)
+  # VALIDATE DEVELOPER CONFIGURATION
   ########################################
 
-  # loop through the form variable and add in required and title elements
-  form.each do |k,v|
+  # test for missing required fields or extra fields that shouldn't be submitted
+  $combined = ($required + $optional + $botcatch)
+  $testarray = form.keys
 
-    # initialize required and found variables
-    r, found = false, false
-
-    # "Prettify" the title - take out any HTML tag spacing punctuation and change to spaces, capitalize to make it more readable
-    t = k.split(/[[:punct:]]/).map(&:capitalize).join(' ')
-
-    # if this form field is in the $required list in config, mark it as found, change the required value to true
-    $required.each do |x|
-      if k == x
-        r, found = true, true
-      end
-    end
-
-    # if this form field is in the $optional list in config, mark it as found, change the required value to false
-    $optional.each do |x|
-      if k == x
-        found = true
-        r = false
-      end
-    end
-
-    # if this form field is in neither list, kill it with an error message
-    if found == false
-      # alert the developer that they forgot to put their form fields in their configuration file
-      puts "Form field '#{k}' is not listed in config.rb, please go back and add it to the configuration file."
-      formstatus = false
-    end
-
-    # create a field object and add it to the $allfields array using the method above
-    Field.new(k,v,r,t).add
-
-  end
-
-  ########################################
-  # LOOP THROUGH ALL PROCESSED FIELDS
-  ########################################
-
-  $allfields.each do |arr|
-
-    # explode the array into named variables
-    nme, val, req, ttl = arr[0], arr[1], arr[2], arr[3]
-
+  # if a required field isn't submitted at all, kill it
+  if not $required & $testarray == $required
+    s = ("Required field(s) missing: " + ($required - $testarray).join(", ")).to_s
+    $j = {error: s}.to_json
+  elsif not ($testarray - $combined).empty?
+    s = ("Extra field(s) submitted: " + ($testarray - $combined).join(", ")).to_s
+    $j = {error: s}.to_json
+  else
     ########################################
-    # VALIDATIONS
+    # VALIDATE FORM SUBMISSION AND PUSH TO JSON & PONY
     ########################################
 
-    # test to make sure required fields are filled out
-    if req == true && val == ""
-      formstatus = false
-    end
+    # loop through the form variable and add in required and title elements
+    form.each do |k,v|
 
-    # use this for any email fields in the form
-    $emailf.each do |x|
-      if nme == x
-        if val[/\A([\w+\-].?)+@[a-z\d\-]+(\.[a-z]+)*\.[a-z]+\z/i] == nil
-          formstatus = false
+      # set required variable
+      r = $required.include? k
+
+      # validate for empty required fields and bad emails
+      f = (not r == true && v == "")
+
+      # validate all email fields as requested by configuration file
+      if $emailf.include? k
+        # email regex
+        if v[/\A([\w+\-].?)+@[a-z\d\-]+(\.[a-z]+)*\.[a-z]+\z/i] == nil
+          f = false
         end
       end
-    end
 
-    ########################################
-    # ASSIGN PONY FIELDS
-    ########################################
+      # "Prettify" the title - take out any HTML tag spacing punctuation and change to spaces, capitalize to make it more readable
+      t = k.split(/[[:punct:]]/).map(&:capitalize).join(' ')
 
-    # check $f_to variable in config; if it's not a list of email addresses, get the value like any other form field
-    $f_to.each do |x|
-      if x[/\A([\w+\-].?)+@[a-z\d\-]+(\.[a-z]+)*\.[a-z]+\z/i] == nil
-        if nme == $f_to
-          to = val
-        end
+      # assign the Pony "from" value
+      if $f_from == k
+        from = v
+      end
+
+      # if Pony to value is assigned by form entry, assign the Pony "to" value
+      if $f_to.include? k
+        to = v
       else
-        to = $f_to.join(',')
+        to = ""
+      end
+
+      # assign the Pony "subject" value
+      if $f_subject.to_s == k
+        subject = v
+      end
+
+      # concatenate all body fields to the single Pony "body" value with line breaks and titles
+      if $f_body.include? k
+        body << t + ": " + v + "\n"
+      end
+
+      # create a field object and add it to the $hashfields array using the method above
+      field k,v,r,t,f
+
+    end
+
+    # if the Pony "to" value is still unassigned (not a form field), assign Pony "to" field to string of email addresses in config file
+    if to == ""
+      $f_to.each do |x|
+        if not x[/\A([\w+\-].?)+@[a-z\d\-]+(\.[a-z]+)*\.[a-z]+\z/i] == nil
+          $tomails.push(x)
+        end
+      end
+      to = $tomails.join(",")
+    end
+
+    ########################################
+    # WRITE TO JSON
+    ########################################
+
+    $j = $hashfields.to_json
+
+    ########################################
+    # AFTER ALL VALIDATION, KILL OR PASS
+    ########################################
+
+    sendemail = true
+
+    $hashfields.each do |x|
+      if x.values[4] == false
+        sendemail = false
       end
     end
 
-    # if this is the same as the $f_from variable, get the value
-    if nme == $f_from
-      from = val
-    end
-
-    # if this is the same as the $f_subject variable, get the value
-    if nme == $f_subject
-      subject = val
-    end
-
-    # combine all body fields in the config file with line breaks
-    $f_body.each do |x|
-      if nme == x
-        body << ttl + ": " + val + "\n"
-      end
+    if sendemail
+      Pony.mail({to: to,from: from,subject: subject,body: body})
     end
 
   end
 
-  ########################################
-  # WRITE TO JSON
-  ########################################
-
-  $j = $hashfields.to_json
-
-  # for testing the JSON output in the terminal, uncomment to see prettified JSON
-  # $parsed = JSON.parse($j)
-  # puts JSON.pretty_generate($parsed)
-
-  File.open("data/temp.json","w") do |f|
-    f.write($j)
-  end
-
-  ########################################
-  # AFTER ALL VALIDATION, KILL OR PASS
-  ########################################
-
-  puts formstatus
-
-  if formstatus == false
-    # output JSON and AJAX call - still need Sunil's help on this
-    puts "kill it all"
-  end
-
-  if formstatus == true
-    Pony.mail({
-      to: to,
-      from: from,
-      subject: subject,
-      body: body
-      })
-  end
-
- return $j
+  return $j
 
 end

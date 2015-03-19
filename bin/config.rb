@@ -10,9 +10,9 @@ $botcatch = ENV['BOTCATCH'].split(" ")
 # $botcatch = ["empty"] # if this field is filled out, we will know the form was submitted by a bot and it should be killed (use anchor tag NAME attribute)
 
 # Drupal config
-$f_to = ENV['F_TO'].split(" ")
+$f_to = ENV['F_TO'].split()
 $f_from = ENV['F_FROM']
-$f_subject = ENV['F_SUBJECT'].split(" ")
+$f_subject = ENV['F_SUBJECT']
 $f_body = ENV['F_BODY'].split(" ")
 
 # non-Drupal config
