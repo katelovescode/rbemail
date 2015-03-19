@@ -1,0 +1,11 @@
+REQUIRED="your_name your_e_mail_address subject"
+OPTIONAL="message reason_for_contact"
+EMAILF="your_e_mail_address"
+BOTCATCH="empty"
+
+F_TO="info@misdepartment.com"
+F_FROM="your_e_mail_address"
+F_SUBJECT="subject"
+F_BODY="reason_for_contact message"
+
+FIELDARRAY="submitted"

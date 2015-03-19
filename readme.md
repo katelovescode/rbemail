@@ -39,9 +39,28 @@ Shotgun (dev only)
 - Staging: [http://pollingplaces-stage.democrats.org](http://pollingplaces-stage.democrats.org)
 
 ## For developers
-This runs on a super-simple dev environment because it's entirely coded in HTML, CSS and JS.  It's an extremely lightweight frontend on the PP API (different repo).
 
-Clone the repo, and develop in your favorite IDE.
+To use environment variables:
+. <(sed '/^export/!s/^/export /' "bin/environment_variables.list")
+
+
+For deployment - change environment_variables.list as follows (this is an example for syntax)
+
+REQUIRED="your_name your_e_mail_address subject" <- all required fields (use anchor tag NAME attribute)
+OPTIONAL="message reason_for_contact" <- all optional fields (use anchor tag NAME attribute)
+EMAILF="your_e_mail_address" <- list any fields you want to validate for correct email format (use anchor tag NAME attribute)
+BOTCATCH="empty" <- if this field is filled out, we will know the form was submitted by a bot and it should be killed (use anchor tag NAME attribute)
+
+F_TO="info@misdepartment.com" <- hard-coded destination addresses or destination address form field (can be an array) (use anchor tag NAME attribute)
+F_FROM="your_e_mail_address" <- users email address form field (use anchor tag NAME attribute)
+F_SUBJECT="subject" <- hard-coded subject or subject form field (use anchor tag NAME attribute)
+F_BODY="reason_for_contact message" <- all form fields that need to go into the email body (use anchor tag NAME attribute)
+
+loops through all "submitted" form fields based on Drupal weird form names as submitted["actual name"]
+this is only necessary for Drupal; if using a form without a field array, leave this line out
+
+FIELDARRAY="submitted"
+
 
 ### Deployment
 1. Developer pushes to develop branch

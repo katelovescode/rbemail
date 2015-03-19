@@ -191,7 +191,7 @@ post '/' do
       end
     end
 
-  end 
+  end
 
   ########################################
   # WRITE TO JSON
@@ -227,6 +227,6 @@ post '/' do
       })
   end
 
- return true
+ return $j
 
 end
