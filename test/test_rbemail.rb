@@ -1,4 +1,4 @@
-require './bin/app.rb'
+require './lib/rbemail.rb'
 require 'test/unit'
 require 'rack/test'
 
