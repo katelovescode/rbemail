@@ -9,6 +9,13 @@ set :static, true
 set :public_folder, "static"
 set :views, "views"
 
+get '/' do
+  # this is for testing non-drupal form names
+  # erb :email_form
+
+  erb :drupal_form
+end
+
 ########################################
 # FORM POST ACTION
 ########################################
