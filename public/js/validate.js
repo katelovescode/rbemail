@@ -11,18 +11,24 @@ $('#webform-client-form-21').submit(function(event) {
   });
 
   request.done(function(msg) {
-    var myClass = "thisIsMyClass";
-    var div = $("<div>Here</div>").addClass(myClass);
 
+    var arraynames = []
 
     msg.map(function (field) {
       if (field.formpass == false) {
-        $("input[name=submitted\\[" + field.fieldname + "\\]]").addClass("error");
+
+        arraynames.push([field.fieldname,field.formpass]);
+//        $("input[name=submitted\\[" + field.fieldname + "\\]]").addClass("error");
       } else {
-        $("input[name=submitted\\[" + field.fieldname + "\\]]").removeClass("error");
+//        $("input[name=submitted\\[" + field.fieldname + "\\]]").removeClass("error");
       }
     });
 
+    arraynames.map(function (fld) {
+      fldnm = fld[0];
+      fldcl = fld[1];
+      $("input[name=submitted\\[" + fldnm + "\\]]").addClass("" + fldcl);
+    })
 
   });
 
