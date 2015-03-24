@@ -105,7 +105,12 @@ Shotgun (dev only)
 ## For developers
 
 To use environment variables:
-. <(sed '/^export/!s/^/export /' "bin/environment_variables.list")
+. <(sed '/^export/!s/^/export /' "lib/environment_variables.list")
+
+Using Shotgun:
+shotgun lib/rbemail.rb
+
+Run FAKESMTP for testing
 
 
 For deployment - change environment_variables.list as follows (this is an example for syntax)
