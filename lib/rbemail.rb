@@ -41,9 +41,9 @@ post '/' do
   ########################################
 
   def field(*args) # set up a class to process each form field into an object
-    @name, @value, @required, @title, @formpass = args
-    $symbols = ["name", "value", "required", "title", "formpass"] # for generating JSON objects
-    $entries = [@name, @value, @required, @title, @formpass] # for generating JSON objects and email fields
+    @fieldname, @value, @required, @title, @formpass = args
+    $symbols = ["fieldname", "value", "required", "title", "formpass"] # for generating JSON objects
+    $entries = [@fieldname, @value, @required, @title, @formpass] # for generating JSON objects and email fields
     $h = Hash[$symbols.zip($entries)] # turn each field's components into a hash
     $hashfields.push($h) # push all field entries in an array of hashes to be output as JSON
   end
@@ -145,6 +145,9 @@ post '/' do
     ########################################
 
     $j = $hashfields.to_json
+
+    $parsed = JSON.parse($j)
+    puts JSON.pretty_generate($parsed)
 
     ########################################
     # AFTER ALL VALIDATION, KILL OR PASS
