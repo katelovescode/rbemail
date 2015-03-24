@@ -146,8 +146,8 @@ post '/' do
 
     $j = $hashfields.to_json
 
-    $parsed = JSON.parse($j)
-    puts JSON.pretty_generate($parsed)
+    # $parsed = JSON.parse($j)
+    # puts JSON.pretty_generate($parsed)
 
     ########################################
     # AFTER ALL VALIDATION, KILL OR PASS
