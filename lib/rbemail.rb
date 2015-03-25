@@ -179,6 +179,7 @@ post '/' do
 
   end
 
+  content_type :json
   return $j
 
 end
