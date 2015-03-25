@@ -90,13 +90,16 @@ post '/' do
       r = $required.include? k
 
       # validate for empty required fields and bad emails
-      f = (not r == true && v == "")
+      f = 0
+      if r == true && v == ""
+        f = 1 # error code for missing required field
+      end
 
       # validate all email fields as requested by configuration file
       if $emailf.include? k
         # email regex
-        if v[/\A([\w+\-].?)+@[a-z\d\-]+(\.[a-z]+)*\.[a-z]+\z/i] == nil
-          f = false
+        if (not v == "") && v[/\A([\w+\-].?)+@[a-z\d\-]+(\.[a-z]+)*\.[a-z]+\z/i] == nil
+          f = 2 # error code for bad email format
         end
       end
 
@@ -106,6 +109,8 @@ post '/' do
       # assign the Pony "from" value
       if $f_from == k
         from = v
+      else
+        from = ENV['F_FROM']
       end
 
       # if Pony to value is assigned by form entry, assign the Pony "to" value
@@ -154,7 +159,7 @@ post '/' do
     sendemail = true
 
     $hashfields.each do |x|
-      if x.values[4] == false
+      if x.values[4] != 0
         sendemail = false
       end
     end
