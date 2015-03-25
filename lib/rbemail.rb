@@ -9,6 +9,13 @@ set :static, true
 set :public_folder, "static"
 set :views, "views"
 
+get '/' do
+  # this is for testing non-drupal form names
+  # erb :email_form
+
+  erb :drupal_form
+end
+
 ########################################
 # TESTING ERB TEMPLATES W/ FORMS - USING BROWSER
 ########################################
@@ -45,9 +52,9 @@ post '/' do
   ########################################
 
   def field(*args) # set up a class to process each form field into an object
-    @name, @value, @required, @title, @formpass = args
-    $symbols = ["name", "value", "required", "title", "formpass"] # for generating JSON objects
-    $entries = [@name, @value, @required, @title, @formpass] # for generating JSON objects and email fields
+    @fieldname, @value, @required, @title, @formpass = args
+    $symbols = ["fieldname", "value", "required", "title", "formpass"] # for generating JSON objects
+    $entries = [@fieldname, @value, @required, @title, @formpass] # for generating JSON objects and email fields
     $h = Hash[$symbols.zip($entries)] # turn each field's components into a hash
     $hashfields.push($h) # push all field entries in an array of hashes to be output as JSON
   end
@@ -94,13 +101,16 @@ post '/' do
       r = $required.include? k
 
       # validate for empty required fields and bad emails
-      f = (not r == true && v == "")
+      f = 0
+      if r == true && v == ""
+        f = 1 # error code for missing required field
+      end
 
       # validate all email fields as requested by configuration file
       if $emailf.include? k
         # email regex
-        if v[/\A([\w+\-].?)+@[a-z\d\-]+(\.[a-z]+)*\.[a-z]+\z/i] == nil
-          f = false
+        if (not v == "") && v[/\A([\w+\-].?)+@[a-z\d\-]+(\.[a-z]+)*\.[a-z]+\z/i] == nil
+          f = 2 # error code for bad email format
         end
       end
 
@@ -110,6 +120,8 @@ post '/' do
       # assign the Pony "from" value
       if $f_from == k
         from = v
+      else
+        from = ENV['F_FROM']
       end
 
       # if Pony to value is assigned by form entry, assign the Pony "to" value
@@ -150,6 +162,7 @@ post '/' do
 
     $j = $hashfields.to_json
 
+
     ########################################
     # AFTER ALL VALIDATION, KILL OR PASS
     ########################################
@@ -157,7 +170,7 @@ post '/' do
     sendemail = true
 
     $hashfields.each do |x|
-      if x.values[4] == false
+      if x.values[4] != 0
         sendemail = false
       end
     end
