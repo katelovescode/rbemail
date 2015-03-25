@@ -4,10 +4,8 @@ require 'json'
 require_relative "config.rb"
 
 # ruby configs
-set :port, 8080
-set :static, true
-set :public_folder, "static"
-set :views, "views"
+set :port, 9393
+set :root, File.expand_path("..", File.dirname(__FILE__))
 
 get '/' do
   # this is for testing non-drupal form names
