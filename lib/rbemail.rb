@@ -1,4 +1,5 @@
 require 'sinatra'
+require 'sinatra/cross_origin'
 require 'pony'
 require 'json'
 require_relative "config.rb"
@@ -7,23 +8,16 @@ require_relative "config.rb"
 set :port, 9393
 set :root, File.expand_path("..", File.dirname(__FILE__))
 
-get '/' do
-  # this is for testing non-drupal form names
-  # erb :email_form
-
-  erb :drupal_form
-end
-
 ########################################
 # TESTING ERB TEMPLATES W/ FORMS - USING BROWSER
 ########################################
 
-get '/' do
-  # this is for testing non-drupal form names
-  # erb :email_form
-
-  erb :drupal_form
-end
+# get '/' do
+#   # this is for testing non-drupal form names
+#   # erb :email_form
+#
+#   erb :drupal_form
+# end
 
 ########################################
 # FORM POST ACTION
@@ -31,7 +25,7 @@ end
 
 # upon posting a form at the root page
 post '/' do
-
+  cross_origin
   ########################################
   # GLOBALS
   ########################################
