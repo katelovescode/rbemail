@@ -1,6 +1,8 @@
 // Drupal form submit for reference
 // <input id="edit-submit" name="op" value="Send Message" class="form-submit" type="submit">
 
+var $ = jQuery;
+
 $( function() {
 
 
