@@ -1,10 +1,26 @@
 <html>
     <head>
         <title>Sample Web Form</title>
+        <script src="//code.jquery.com/jquery-1.4.4.min.js"></script>
+        <style>
+          .error {
+            background-color: rgba(255,0,0,0.4);
+            border: 1px solid #ff0000;
+            margin:2px;
+          }
+          /*.errorDiv {
+            display:inline;
+            margin-left:20px;
+            color: #ff0000;
+          }*/
+        </style>
     </head>
 <body>
 
 <%= yield %>
+<script src="demos/drupal/js/validate.js"></script>
+
+<!-- JS is linked correctly but is not processing -->
 
 </body>
 </html>

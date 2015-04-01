@@ -1,6 +1,12 @@
 source 'https://rubygems.org'
 
-gem 'sinatra', '~> 1.4.5'
-gem 'pony', '~> 1.11'
-gem 'mail', '~> 2.6.3'
-gem 'mime-types', '~> 2.4.3'
+gem 'sinatra'
+gem "sinatra-cross_origin"
+gem 'pony'
+gem 'mail'
+gem 'mime-types'
+gem 'json'
+
+group :development do
+  gem 'shotgun'
+end
