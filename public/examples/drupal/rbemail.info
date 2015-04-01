@@ -1,0 +1,5 @@
+name = rbemail
+description = A javascript AJAX call to rbemail running on an external server
+core = 7.x
+package = Custom
+files[] = rbemail.module
