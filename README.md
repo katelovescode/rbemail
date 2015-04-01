@@ -83,7 +83,7 @@ Gems:
 Pony
 Mail
 Mime-Types
-Sinatra (dev only)
+Sinatra
 Shotgun (dev only)
 
 # STOPPED HERE - KEEP WORKING BELOW
