@@ -6,14 +6,14 @@
 
  function rbemail_preprocess_page(&$variables) {
    drupal_add_js(array('rbemail' => array(
-     'formID' => '#webform-client-form-21',
-     'successText' => 'Thank you, someone will be in touch with you shortly.',
-     'valError1' => 'This field is required.',
-     'valError2' => 'This is not the correct format for this field.'
+     'formID' => '#webform-client-form-21',                                     // ID of the form
+     'successText' => 'Thank you, someone will be in touch with you shortly.',  // Message on success
+     'valError1' => 'This field is required.',                                  // Message on missing required field
+     'valError2' => 'This is not the correct format for this field.'            // Message on incorrectly formatted field
      )), 'setting');
    drupal_add_js(drupal_get_path('module','rbemail') . '/js/validate.js');
  }
 
  function rbemail_form_webform_client_form_21_alter(&$form, &$form_state, $form_id) {
-   $form['#action'] = 'http://localhost:9393';
+   $form['#action'] = 'http://localhost:9393';                                  // Location of the email server
  }
