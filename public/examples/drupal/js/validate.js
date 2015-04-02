@@ -1,10 +1,13 @@
-var formID = "#webform-client-form-21";  // ID of your contact form
-var successText = "Thank you, someone will be in touch with you shortly."; // Message to display on success
-var valError1 = "This field is required."; // Message to display on required field error
-var valError2 = "This is not the correct format for this field."; // Message to display on incorrect format field error
+var $ = jQuery;
 
-jQuery(document).ready(function ($) {
+
+$(function () {
     "use strict";
+    var formID, successText, valError1, valError2;
+    formID = Drupal.settings.rbemail.formID;  // ID of your contact form
+    successText = Drupal.settings.rbemail.successText; // Message to display on success
+    valError1 = Drupal.settings.rbemail.valError1; // Message to display on required field error
+    valError2 = Drupal.settings.rbemail.valError2; // Message to display on incorrect format field error
 
     // create an error message
     function createError(loc, msg) {
@@ -52,8 +55,6 @@ jQuery(document).ready(function ($) {
                 $.each(data, function () {
                     // get field by fieldname
                     var nameSearch = "[name*=" + this.fieldname + "]";
-
-
                     // different error codes for formpass; 0 is pass, 1 is missing, 2 is invalid format
                     switch (this.formpass) {
                     case 0:
