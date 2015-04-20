@@ -112,7 +112,7 @@ go() {
     docker_run_command+=${RUN[@]}
 
     echo $docker_run_command
-    # eval $docker_run_command
+    eval $docker_run_command
 
     sleep 3
   done
