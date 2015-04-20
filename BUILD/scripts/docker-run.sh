@@ -58,7 +58,7 @@ go() {
     docker_run_command="docker run "
     docker_run_command+=" --name $CONTAINER_NAME"
     docker_run_command+=" $LINKS"
- 
+
     if [ "$EXPOSE_PORTS" = true ];
     then
       docker_run_command+=" --publish-all=true"
@@ -107,12 +107,12 @@ go() {
       LATEST_IMAGE_TAG=`cd .. && git rev-parse HEAD | cut -c1-12`
       IMAGE_NAME+=":$LATEST_IMAGE_TAG"
     fi
-    
+
     docker_run_command+=" $IMAGE_NAME "
     docker_run_command+=${RUN[@]}
 
     echo $docker_run_command
-    eval $docker_run_command
+    # eval $docker_run_command
 
     sleep 3
   done
