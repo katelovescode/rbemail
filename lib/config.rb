@@ -23,14 +23,15 @@ $f_body = ENV['F_BODY'].chomp('"').reverse.chomp('"').reverse.split(" ")
 
 $fieldarray = ENV['FIELDARRAY'].chomp('"').reverse.chomp('"').reverse.to_sym
 
-if ENV['SEND_VIA'] == ""
-  $send_via = nil
-else
-  $send_via = ENV['SEND_VIA'].chomp('"').reverse.chomp('"').reverse.to_sym
-end
+
+$send_via = ENV['SEND_VIA'].chomp('"').reverse.chomp('"').reverse.to_sym
 $smtp_address = ENV['SMTP_ADDRESS'].chomp('"').reverse.chomp('"').reverse
 $smtp_port = ENV['SMTP_PORT'].chomp('"').reverse.chomp('"').reverse
 $smtp_user = ENV['SMTP_USER'].chomp('"').reverse.chomp('"').reverse
 $smtp_pass = ENV['SMTP_PASS'].chomp('"').reverse.chomp('"').reverse
-$smtp_auth = ENV['SMTP_AUTH'].chomp('"').reverse.chomp('"').reverse.to_sym
+if ENV['SMTP_AUTH'] == ""
+  $smtp_auth = nil
+else
+  $smtp_auth = ENV['SMTP_AUTH'].chomp('"').reverse.chomp('"').reverse.to_sym
+end
 $smtp_domain = ENV['SMTP_DOMAIN'].chomp('"').reverse.chomp('"').reverse
