@@ -23,7 +23,7 @@ $f_body = ENV['F_BODY'].chomp('"').reverse.chomp('"').reverse.split(" ")
 
 $fieldarray = ENV['FIELDARRAY'].chomp('"').reverse.chomp('"').reverse.to_sym
 
-$send_via = ENV['SEND_VIA'].chomp('"').reverse.chomp('"').reverse.downcase!.to_sym
+$send_via = ENV['SEND_VIA'].chomp('"').reverse.chomp('"').reverse.to_sym
 $smtp_address = ENV['SMTP_ADDRESS'].chomp('"').reverse.chomp('"').reverse
 $smtp_port = ENV['SMTP_PORT'].chomp('"').reverse.chomp('"').reverse
 $smtp_user = ENV['SMTP_USER'].chomp('"').reverse.chomp('"').reverse
