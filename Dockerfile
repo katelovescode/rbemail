@@ -12,8 +12,8 @@ WORKDIR /home/app/rbemail
 
 ADD . /home/app/rbemail
 
-ADD config/instance_profiles/app/docker/nginx.conf /etc/nginx/sites-enabled/toolbox-v2.conf
-ADD config/instance_profiles/app/docker/docker-env.conf /etc/nginx/main.d/toolbox-v2.conf
+ADD config/instance_profiles/app/docker/nginx.conf /etc/nginx/sites-enabled/rbemail.conf
+ADD config/instance_profiles/app/docker/docker-env.conf /etc/nginx/main.d/rbemail.conf
 
 RUN chown app:app /home/app -R
 

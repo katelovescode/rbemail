@@ -1,0 +1,7 @@
+{
+	"version": 1.0,
+	"namespace": "docker-reg.misdepartment.com",
+	"names": {
+		"/": "docker-reg.misdepartment.com/rbemail"
+	}
+}
