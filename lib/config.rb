@@ -22,3 +22,11 @@ $f_body = ENV['F_BODY'].split(" ")
 # $f_body = ["reason","message"] # all form fields that need to go into the email body (use anchor tag NAME attribute)
 
 $fieldarray = ENV['FIELDARRAY'].to_sym
+
+$send_via = ENV['SEND_VIA']
+$smtp_address = ENV['SMTP_ADDRESS']
+$smtp_port = ENV['SMTP_PORT']
+$smtp_user = ENV['SMTP_USER']
+$smtp_pass = ENV['SMTP_PASS']
+$smtp_auth = ENV['SMTP_AUTH'].to_sym
+$smtp_domain = ENV['SMTP_DOMAIN']

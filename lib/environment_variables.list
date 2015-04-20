@@ -9,3 +9,11 @@ F_SUBJECT="subject"                               # hard-coded subject or subjec
 F_BODY="reason_for_contact message"               # all form fields that need to go into the email body (use anchor tag NAME attribute)
 
 FIELDARRAY="submitted"                            # The FIELDARRAY variable as currently set loops through all "submitted" form fields based on Drupal weird form names as submitted["actual_field_name"].  This is only necessary for forms that generate their fields as part of an array; if using a form without a field array, leave this line out
+
+SEND_VIA="SMTP"                                   # mail send method
+SMTP_ADDRESS="10.1.1.70"                          # SMTP address
+SMTP_PORT="25"                                    # SMTP port
+SMTP_USER=""                                      # SMTP username
+SMTP_PASS=""                                      # SMTP password
+SMTP_AUTH="plain"                                 # SMTP authorization (plain, login, cram_md5)
+SMTP_DOMAIN="localhost.localdomain"               # SMTP domain
