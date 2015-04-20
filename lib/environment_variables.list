@@ -26,6 +26,7 @@ F_BODY="reason_for_contact message"
 FIELDARRAY="submitted"
 
 # SMTP variables
+# SEND_VIA must be a lowercase value (e.g. 'smtp')
 SEND_VIA="smtp"
 SMTP_ADDRESS="10.1.1.70"
 SMTP_PORT="25"
