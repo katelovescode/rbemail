@@ -168,7 +168,7 @@ post '/' do
     end
 
     if sendemail
-      Pony.mail({to: to,from: from,subject: subject,body: body,via: via,via_options: => { address: $smtp_address,port: $smtp_port,user_name: $smtp_user,password: $smtp_pass,authentication: $smtp_auth,domain: $smtp_domain}})
+      Pony.mail({to: to,from: from,subject: subject,body: body,via: $send_via,via_options: { address: $smtp_address,port: $smtp_port,user_name: $smtp_user,password: $smtp_pass,authentication: $smtp_auth,domain: $smtp_domain}})
     end
 
   end

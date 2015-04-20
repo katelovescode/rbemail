@@ -1,7 +1,7 @@
 $required = ENV['REQUIRED'].chomp('"').reverse.chomp('"').reverse.split(" ")
 $optional = ENV['OPTIONAL'].chomp('"').reverse.chomp('"').reverse.split(" ")
 $emailf = ENV['EMAILF'].chomp('"').reverse.chomp('"').reverse.split(" ")
-# $botcatch = ENV['BOTCATCH'].chomp('"').reverse.chomp('"').reverse.split(" ")
+$botcatch = ENV['BOTCATCH'].chomp('"').reverse.chomp('"').reverse.split(" ")
 
 # non-Drupal config
 # $required = ["name","email","subject"] # all required fields (use anchor tag NAME attribute)
@@ -23,7 +23,7 @@ $f_body = ENV['F_BODY'].chomp('"').reverse.chomp('"').reverse.split(" ")
 
 $fieldarray = ENV['FIELDARRAY'].chomp('"').reverse.chomp('"').reverse.to_sym
 
-$send_via = ENV['SEND_VIA'].chomp('"').reverse.chomp('"').reverse
+$send_via = ENV['SEND_VIA'].chomp('"').reverse.chomp('"').reverse.downcase!.to_sym
 $smtp_address = ENV['SMTP_ADDRESS'].chomp('"').reverse.chomp('"').reverse
 $smtp_port = ENV['SMTP_PORT'].chomp('"').reverse.chomp('"').reverse
 $smtp_user = ENV['SMTP_USER'].chomp('"').reverse.chomp('"').reverse
