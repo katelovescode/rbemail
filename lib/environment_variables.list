@@ -1,19 +1,35 @@
-REQUIRED="your_name your_e_mail_address subject"  # all required fields (use anchor tag NAME attribute)
-OPTIONAL="message reason_for_contact"             # all optional fields (use anchor tag NAME attribute)
-EMAILF="your_e_mail_address"                      # list any fields you want to validate for correct email format (use anchor tag NAME attribute)
-# BOTCATCH="empty"                                # (VALIDATION LOGIC FOR THIS DOESN'T EXIST YET) if this field is filled out, we will know the form was submitted by a bot and it should be killed (use anchor tag NAME attribute)
+# all required fields (use anchor tag NAME attribute)
+REQUIRED="your_name your_e_mail_address subject"
 
-F_TO="info@misdepartment.com"                     # hard-coded destination addresses or destination address form field (can be an array) (use anchor tag NAME attribute)
-F_FROM="your_e_mail_address"                      # user's email address form field (use anchor tag NAME attribute)
-F_SUBJECT="subject"                               # hard-coded subject or subject form field (use anchor tag NAME attribute)
-F_BODY="reason_for_contact message"               # all form fields that need to go into the email body (use anchor tag NAME attribute)
+# all optional fields (use anchor tag NAME attribute)
+OPTIONAL="message reason_for_contact"
 
-FIELDARRAY="submitted"                            # The FIELDARRAY variable as currently set loops through all "submitted" form fields based on Drupal weird form names as submitted["actual_field_name"].  This is only necessary for forms that generate their fields as part of an array; if using a form without a field array, leave this line out
+# list any fields you want to validate for correct email format (use anchor tag NAME attribute)
+EMAILF="your_e_mail_address"
 
-SEND_VIA="SMTP"                                   # mail send method
-SMTP_ADDRESS="10.1.1.70"                          # SMTP address
-SMTP_PORT="25"                                    # SMTP port
-SMTP_USER=""                                      # SMTP username
-SMTP_PASS=""                                      # SMTP password
-SMTP_AUTH="plain"                                 # SMTP authorization (plain, login, cram_md5)
-SMTP_DOMAIN="localhost.localdomain"               # SMTP domain
+# (VALIDATION LOGIC FOR THIS DOESN'T EXIST YET) if this field is filled out, we will know the form was submitted by a bot and it should be killed (use anchor tag NAME attribute)
+# BOTCATCH="empty"
+
+# hard-coded destination addresses or destination address form field (can be an array) (use anchor tag NAME attribute)
+F_TO="info@misdepartment.com"
+
+# user's email address form field (use anchor tag NAME attribute)
+F_FROM="your_e_mail_address"
+
+# hard-coded subject or subject form field (use anchor tag NAME attribute)
+F_SUBJECT="subject"
+
+# all form fields that need to go into the email body (use anchor tag NAME attribute)
+F_BODY="reason_for_contact message"
+
+# The FIELDARRAY variable as currently set loops through all "submitted" form fields based on Drupal weird form names as submitted["actual_field_name"].  This is only necessary for forms that generate their fields as part of an array; if using a form without a field array, leave this line out
+FIELDARRAY="submitted"
+
+# SMTP variables
+SEND_VIA="SMTP"
+SMTP_ADDRESS="10.1.1.70"
+SMTP_PORT="25"
+SMTP_USER=""
+SMTP_PASS=""
+SMTP_AUTH="plain"
+SMTP_DOMAIN="localhost.localdomain"

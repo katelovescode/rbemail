@@ -1,5 +1,5 @@
-$required = ENV['REQUIRED'].split(" ")
-$optional = ENV['OPTIONAL'].split(" ")
+$required = ENV['REQUIRED'].rchomp('"').chomp('"').split(" ")
+$optional = ENV['OPTIONAL'].rchomp('"').chomp('"').split(" ")
 $emailf = ENV['EMAILF'].split(" ")
 $botcatch = ENV['BOTCATCH'].split(" ")
 
@@ -24,7 +24,7 @@ $f_body = ENV['F_BODY'].split(" ")
 $fieldarray = ENV['FIELDARRAY'].to_sym
 
 $send_via = ENV['SEND_VIA']
-$smtp_address = ENV['SMTP_ADDRESS']
+$smtp_address = ENV['SMTP_ADDRESS'].rchomp('"').chomp('"')
 $smtp_port = ENV['SMTP_PORT']
 $smtp_user = ENV['SMTP_USER']
 $smtp_pass = ENV['SMTP_PASS']
