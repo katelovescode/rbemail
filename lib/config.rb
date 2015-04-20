@@ -29,7 +29,7 @@ $smtp_address = ENV['SMTP_ADDRESS'].chomp('"').reverse.chomp('"').reverse
 $smtp_port = ENV['SMTP_PORT'].chomp('"').reverse.chomp('"').reverse
 $smtp_user = ENV['SMTP_USER'].chomp('"').reverse.chomp('"').reverse
 $smtp_pass = ENV['SMTP_PASS'].chomp('"').reverse.chomp('"').reverse
-if ENV['SMTP_AUTH'] == ""
+if ENV['SMTP_AUTH'] == "\"\""
   $smtp_auth = nil
 else
   $smtp_auth = ENV['SMTP_AUTH'].chomp('"').reverse.chomp('"').reverse.to_sym
