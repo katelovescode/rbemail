@@ -1,7 +1,7 @@
 $required = ENV['REQUIRED'].chomp('"').reverse.chomp('"').reverse.split(" ")
 $optional = ENV['OPTIONAL'].chomp('"').reverse.chomp('"').reverse.split(" ")
 $emailf = ENV['EMAILF'].chomp('"').reverse.chomp('"').reverse.split(" ")
-$botcatch = ENV['BOTCATCH'].chomp('"').reverse.chomp('"').reverse.split(" ")
+# $botcatch = ENV['BOTCATCH'].chomp('"').reverse.chomp('"').reverse.split(" ")
 
 # non-Drupal config
 # $required = ["name","email","subject"] # all required fields (use anchor tag NAME attribute)
