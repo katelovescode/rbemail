@@ -8,7 +8,7 @@ OPTIONAL="message reason_for_contact"
 EMAILF="your_e_mail_address"
 
 # (VALIDATION LOGIC FOR THIS DOESN'T EXIST YET) if this field is filled out, we will know the form was submitted by a bot and it should be killed (use anchor tag NAME attribute)
-# BOTCATCH="empty"
+BOTCATCH="empty"
 
 # hard-coded destination addresses or destination address form field (can be an array) (use anchor tag NAME attribute)
 F_TO="info@misdepartment.com"
@@ -26,7 +26,7 @@ F_BODY="reason_for_contact message"
 FIELDARRAY="submitted"
 
 # SMTP variables
-SEND_VIA="SMTP"
+SEND_VIA="smtp"
 SMTP_ADDRESS="10.1.1.70"
 SMTP_PORT="25"
 SMTP_USER=""
