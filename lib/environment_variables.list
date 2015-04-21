@@ -28,7 +28,7 @@ FIELDARRAY="submitted"
 # SMTP variables
 # SEND_VIA must be a lowercase value (e.g. 'smtp')
 SEND_VIA="smtp"
-SMTP_ADDRESS="10.1.1.70"
+SMTP_ADDRESS="10.0.0.13"
 SMTP_PORT="25"
 SMTP_USER=""
 SMTP_PASS=""
