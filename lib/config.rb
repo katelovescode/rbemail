@@ -10,7 +10,7 @@ $botcatch = ENV['BOTCATCH'].chomp('"').reverse.chomp('"').reverse.split(" ")
 # $botcatch = ["empty"] # if this field is filled out, we will know the form was submitted by a bot and it should be killed (use anchor tag NAME attribute)
 
 # Drupal config
-$f_to = ENV['F_TO'].chomp('"').reverse.chomp('"').reverse.split()
+$f_to = ENV['F_TO'].chomp('"').reverse.chomp('"').reverse.split(" ")
 $f_from = ENV['F_FROM'].chomp('"').reverse.chomp('"').reverse
 $f_subject = ENV['F_SUBJECT'].chomp('"').reverse.chomp('"').reverse
 $f_body = ENV['F_BODY'].chomp('"').reverse.chomp('"').reverse.split(" ")
