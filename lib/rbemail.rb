@@ -36,6 +36,7 @@ post '/' do
   from = ""
   subject = ""
   body = ""
+  to_array = []
   $hashfields = []
   $tomails = []
 
@@ -112,15 +113,11 @@ post '/' do
       # assign the Pony "from" value
       if $f_from == k
         from = v
-      else
-        from = ENV['F_FROM']
       end
 
       # if Pony to value is assigned by form entry, assign the Pony "to" value
       if $f_to.include? k
         to = v
-      else
-        to = ""
       end
 
       # assign the Pony "subject" value
@@ -136,6 +133,11 @@ post '/' do
       # create a field object and add it to the $hashfields array using the method above
       field k,v,r,t,f
 
+    end
+
+    # if "from" value is an email address in the config, set "from"
+    if $f_from[/\A([\w+\-].?)+@[a-z\d\-]+(\.[a-z]+)*\.[a-z]+\z/i] != nil
+      from = $f_from
     end
 
     # if the Pony "to" value is still unassigned (not a form field), assign Pony "to" field to string of email addresses in config file
