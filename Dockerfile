@@ -1,4 +1,4 @@
-FROM phusion/passenger-ruby22:latest
+FROM docker-reg.misdepartment.com/rbemail-baseimage
 
 # Set correct environment variables.
 ENV HOME /root
