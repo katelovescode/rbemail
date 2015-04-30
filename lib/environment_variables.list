@@ -7,7 +7,11 @@ OPTIONAL="message reason_for_contact"
 # list any fields you want to validate for correct email format (use anchor tag NAME attribute)
 EMAILF="your_e_mail_address"
 
+<<<<<<< HEAD
 # TODO: (VALIDATION LOGIC FOR THIS DOESN'T EXIST YET) if this field is filled out, we will know the form was submitted by a bot and it should be killed (use anchor tag NAME attribute)
+=======
+# (VALIDATION LOGIC FOR THIS DOESN'T EXIST YET) if this field is filled out, we will know the form was submitted by a bot and it should be killed (use anchor tag NAME attribute)
+>>>>>>> c72584c5d81792afd79ad81b64ad0c33a34d45e6
 BOTCATCH="empty"
 
 # hard-coded destination addresses or destination address form field (can be an array) (use anchor tag NAME attribute)
