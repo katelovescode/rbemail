@@ -3,11 +3,12 @@ var $ = jQuery;
 
 $(function () {
     "use strict";
-    var formID, successText, valError1, valError2;
+    var formID, successText, valError1, valError2, mailServer;
     formID = Drupal.settings.rbemail.formID;  // ID of your contact form
     successText = Drupal.settings.rbemail.successText; // Message to display on success
     valError1 = Drupal.settings.rbemail.valError1; // Message to display on required field error
     valError2 = Drupal.settings.rbemail.valError2; // Message to display on incorrect format field error
+    mailServer = Drupal.settings.rbemail.mailServer;
 
     // create an error message
     function createError(loc, msg) {
@@ -46,7 +47,7 @@ $(function () {
 
         // ajax call
         $.ajax({
-            url: "http://localhost:9393/",
+            url: mailServer,
             type: "POST",
             data: $(formID).serialize(),
             success: function (data) {
