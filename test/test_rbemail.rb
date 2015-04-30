@@ -33,13 +33,13 @@ end
 ########################################
 
 # this will die (9393 port - shotgun)
-# while true; do curl --data "submitted[your_name]=kate&submitted[your_e_mail_address]=kklemp@misdepartment.com&submitted[subject]=what" http://localhost:9393; sleep 10; done
+# while true; do curl --data "submitted[your_name]=test&submitted[your_e_mail_address]=test@test.com&submitted[subject]=what" http://localhost:9393; sleep 10; done
 
 # this will pass (9393 port - shotgun)
-# while true; do curl --data "submitted[your_name]=kate&submitted[your_e_mail_address]=kklemp@misdepartment.com&submitted[subject]=what&submitted[reason_for_contact]=becuz" http://localhost:9393; sleep 10; done
+# while true; do curl --data "submitted[your_name]=test&submitted[your_e_mail_address]=test@test.com&submitted[subject]=what&submitted[reason_for_contact]=becuz" http://localhost:9393; sleep 10; done
 
 # form params with no drupal submitted array (9393 port - shotgun)
-# while true; do curl --data "name=kate&email=kklemp@misdepartment.com&subject=what&reason=becuz" http://localhost:9393; sleep 10; done
+# while true; do curl --data "name=test&email=test@test.com&subject=what&reason=becuz" http://localhost:9393; sleep 10; done
 
 ########################################
 # TESTING ERB TEMPLATES W/ FORMS - USING BROWSER
