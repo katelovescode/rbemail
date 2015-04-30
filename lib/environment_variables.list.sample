@@ -1,36 +1,36 @@
 # all required fields (use anchor tag NAME attribute)
-REQUIRED="your_name your_e_mail_address subject"
+REQUIRED="example_name example_email example_message"
 
 # all optional fields (use anchor tag NAME attribute)
-OPTIONAL="message reason_for_contact"
+OPTIONAL="example_phone example_rating"
 
 # list any fields you want to validate for correct email format (use anchor tag NAME attribute)
-EMAILF="your_e_mail_address"
+EMAILF="example_email"
 
 # TODO: (VALIDATION LOGIC FOR THIS DOESN'T EXIST YET) if this field is filled out, we will know the form was submitted by a bot and it should be killed (use anchor tag NAME attribute)
-BOTCATCH="empty"
+BOTCATCH="example_botfield"
 
 # hard-coded destination addresses or destination address form field (can be an array) (use anchor tag NAME attribute)
-F_TO="info@misdepartment.com"
+F_TO="to@example.com"
 
 # user's email address form field (use anchor tag NAME attribute)
-F_FROM="your_e_mail_address"
+F_FROM="example_email"
 
 # hard-coded subject or subject form field (use anchor tag NAME attribute)
-F_SUBJECT="subject"
+F_SUBJECT="example_subject"
 
 # all form fields that need to go into the email body (use anchor tag NAME attribute)
-F_BODY="reason_for_contact message"
+F_BODY="example_message example_rating"
 
 # The FIELDARRAY variable as currently set loops through all "submitted" form fields based on Drupal weird form names as submitted["actual_field_name"].  This is only necessary for forms that generate their fields as part of an array; if using a form without a field array, leave this line out
-FIELDARRAY="submitted"
+FIELDARRAY="example_fieldarray"
 
 # SMTP variables
 # SEND_VIA must be a lowercase value (e.g. 'smtp')
 SEND_VIA="smtp"
-SMTP_ADDRESS="email-smtp.us-east-1.amazonaws.com"
+SMTP_ADDRESS="example_stmp_server_address"
 SMTP_PORT="25"
-SMTP_USER="AKIAISU3KJW6HIBWGMTQ"
-SMTP_PASS="Anca806UHpRUS9GO8LLXOqQmeYp8dMbcqDG/Jkqkcm2G "
+SMTP_USER="example_smtp_user"
+SMTP_PASS="example_smtp_pass"
 SMTP_AUTH="plain"
-SMTP_DOMAIN="misdepartment.com"
+SMTP_DOMAIN="example.com"

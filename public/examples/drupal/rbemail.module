@@ -9,7 +9,8 @@
      'formID' => '#webform-client-form-21',                                     // ID of the form
      'successText' => 'Thank you, someone will be in touch with you shortly.',  // Message on success
      'valError1' => 'This field is required.',                                  // Message on missing required field
-     'valError2' => 'This is not the correct format for this field.'            // Message on incorrectly formatted field
+     'valError2' => 'This is not the correct format for this field.',           // Message on incorrectly formatted field
+     'mailServer' => 'http://localhost:9393'
      )), 'setting');
    drupal_add_js(drupal_get_path('module','rbemail') . '/js/validate.js');
  }
