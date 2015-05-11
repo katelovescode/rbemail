@@ -7,8 +7,11 @@ gem 'mail'
 gem 'mime-types'
 gem 'json'
 
-group :development, :test do
+group :development do
   gem 'shotgun'
+end
+
+group :development, :test do
   gem 'rspec'
   gem 'rack-test'
   gem 'mailcatcher'
