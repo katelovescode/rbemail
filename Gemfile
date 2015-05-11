@@ -7,6 +7,9 @@ gem 'mail'
 gem 'mime-types'
 gem 'json'
 
-group :development do
+group :development, :test do
   gem 'shotgun'
+  gem 'rspec'
+  gem 'mailcatcher'
+  gem 'dotenv'
 end
