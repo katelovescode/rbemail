@@ -1,3 +1,8 @@
+require 'dotenv'
+
+dotenvfile = "lib/variables.env.#{ENV['RACK_ENV']}"
+Dotenv.load dotenvfile
+
 $required = ENV['REQUIRED'].chomp('"').reverse.chomp('"').reverse.split(" ")
 $optional = ENV['OPTIONAL'].chomp('"').reverse.chomp('"').reverse.split(" ")
 $emailf = ENV['EMAILF'].chomp('"').reverse.chomp('"').reverse.split(" ")
