@@ -10,6 +10,7 @@ gem 'json'
 group :development, :test do
   gem 'shotgun'
   gem 'rspec'
+  gem 'rack-test'
   gem 'mailcatcher'
   gem 'dotenv'
 end
