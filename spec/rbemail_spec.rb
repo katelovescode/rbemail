@@ -5,21 +5,27 @@ ENV['RACK_ENV'] = 'test'
 require 'rbemail'  # <-- your sinatra app
 require 'rspec'
 require 'rack/test'
+require 'net/http'
+require 'uri'
+require 'json'
 require File.expand_path('../spec_helper', __FILE__)
+
 
 describe "Rbemail" do
   include Rack::Test::Methods
+  let(:example_email) { "email@example.com" }
   let(:good_request) {
     {
       example_fieldarray: {
         example_name: "test",
-        example_email: "email@example.com",
+        example_email: example_email,
         example_message: "hello world",
         example_phone: "123-456-7890",
         example_rating: "4"
       }
     }
   }
+  let(:mailcatcher_endpoint) { "http://127.0.0.1:1080" }
 
   # set up mailcatcher for the tests
   before do
@@ -39,5 +45,15 @@ describe "Rbemail" do
     post "/", good_request
     expect(last_response.status).to equal(200)
   end
+
+  it "produces a real email" do
+    post "/", good_request
+    uri = URI.parse("#{mailcatcher_endpoint}/messages")
+    response = Net::HTTP.get_response(uri)
+    messages = JSON.parse(response.body)
+    last_message = messages[0]
+    expect(last_message['sender']).to eq("<#{example_email}>")
+  end
+
 
 end
