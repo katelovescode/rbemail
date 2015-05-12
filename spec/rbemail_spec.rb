@@ -5,7 +5,11 @@ ENV['RACK_ENV'] = 'test'
 require 'rbemail'  # <-- your sinatra app
 require 'rspec'
 require 'rack/test'
+require 'net/http'
+require 'uri'
+require 'json'
 require File.expand_path('../spec_helper', __FILE__)
+
 
 describe "Rbemail" do
   include Rack::Test::Methods
