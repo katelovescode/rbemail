@@ -26,7 +26,9 @@ $f_body = ENV['F_BODY'].chomp('"').reverse.chomp('"').reverse.split(" ")
 # $f_subject = "subject" # hard-coded subject or subject form field (use anchor tag NAME attribute)
 # $f_body = ["reason","message"] # all form fields that need to go into the email body (use anchor tag NAME attribute)
 
-$fieldarray = ENV['FIELDARRAY'].chomp('"').reverse.chomp('"').reverse.to_sym
+unless ENV['FIELDARRAY'].nil?
+  $fieldarray = ENV['FIELDARRAY'].chomp('"').reverse.chomp('"').reverse.to_sym
+end
 
 
 $send_via = ENV['SEND_VIA'].chomp('"').reverse.chomp('"').reverse.to_sym

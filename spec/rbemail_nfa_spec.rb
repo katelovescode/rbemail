@@ -1,4 +1,4 @@
-ENV['RACK_ENV'] = 'test'
+ENV['RACK_ENV'] = 'nfatest'
 
 # submitted[your_name]=test&submitted[your_e_mail_address]=test@test.com&submitted[subject]=what&submitted[reason_for_contact]=becuz
 
@@ -14,17 +14,16 @@ require File.expand_path('../spec_helper', __FILE__)
 describe "Rbemail" do
   include Rack::Test::Methods
 
-  context "field array is present, such as in drupal" do
+  context "field array is not present, such as in a hand-coded form" do
+    
     let(:example_email) { "email@example.com" }
     let(:good_request) {
       {
-        example_fieldarray: {
-          example_name: "test",
-          example_email: example_email,
-          example_message: "hello world",
-          example_phone: "123-456-7890",
-          example_rating: "4"
-        }
+        example_name: "test",
+        example_email: example_email,
+        example_message: "hello world",
+        example_phone: "123-456-7890",
+        example_rating: "4"
       }
     }
     let(:mailcatcher_endpoint) { "http://127.0.0.1:1080" }
@@ -57,9 +56,6 @@ describe "Rbemail" do
       expect(last_message['sender']).to eq("<#{example_email}>")
     end
 
-  end
-
-  context "field array is not present, such as in a hand-coded form" do
   end
 
 end

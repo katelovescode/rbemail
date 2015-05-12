@@ -55,16 +55,13 @@ post '/' do
   ########################################
   # CHECK CONFIG FOR DRUPAL FORM ARRAY SYNTAX
   ########################################
-
   # if $fieldarray is present (e.g. we are using drupal, which arrays its form fields)
-  unless $fieldarray.nil?
+  if defined?($fieldarray)
     # the form variable is the result array of the parameters that are found in the fieldarray
     form = params[$fieldarray]
   else
     # loop through the form fields and add each form field key, value to the form array variable
-    params.each do |key,value|
-      form.push([key,value])
-    end
+    form = params
   end
 
   ########################################
