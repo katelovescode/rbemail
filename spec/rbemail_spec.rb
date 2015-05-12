@@ -41,4 +41,3 @@ describe "Rbemail" do
   end
 
 end
-
