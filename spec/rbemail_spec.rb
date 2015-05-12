@@ -46,5 +46,15 @@ describe "Rbemail" do
     expect(last_response.status).to equal(200)
   end
 
+  it "produces a real email" do
+    post "/", good_request
+    uri = URI.parse("#{mailcatcher_endpoint}/messages")
+    response = Net::HTTP.get_response(uri)
+    messages = JSON.parse(response.body)
+    last_message = messages[0]
+    expect(last_message['sender']).to eq("<#{example_email}>")
+  end
+
+
 end
 
