@@ -1,2 +1,2 @@
 views/*
-lib/variables.env.prod
+.env.production

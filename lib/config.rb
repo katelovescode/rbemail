@@ -1,7 +1,9 @@
 require 'dotenv'
 
-dotenvfile = "lib/variables.env.#{ENV['RACK_ENV']}"
-Dotenv.load dotenvfile
+if defined?(ENV['RACK_ENV'])
+  dotenvfile1 = ".env.#{ENV['RACK_ENV']}"
+  Dotenv.load dotenvfile1
+end
 
 $required = ENV['REQUIRED'].chomp('"').reverse.chomp('"').reverse.split(" ")
 $optional = ENV['OPTIONAL'].chomp('"').reverse.chomp('"').reverse.split(" ")
@@ -26,7 +28,7 @@ $f_body = ENV['F_BODY'].chomp('"').reverse.chomp('"').reverse.split(" ")
 # $f_subject = "subject" # hard-coded subject or subject form field (use anchor tag NAME attribute)
 # $f_body = ["reason","message"] # all form fields that need to go into the email body (use anchor tag NAME attribute)
 
-unless ENV['FIELDARRAY'].nil?
+unless ENV['FIELDARRAY'] == ""
   $fieldarray = ENV['FIELDARRAY'].chomp('"').reverse.chomp('"').reverse.to_sym
 end
 
