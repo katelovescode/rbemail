@@ -59,4 +59,7 @@ describe "Rbemail" do
 
   end
 
+  context "field array is not present, such as in a hand-coded form" do
+  end
+
 end
