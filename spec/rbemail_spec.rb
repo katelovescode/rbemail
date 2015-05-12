@@ -13,17 +13,19 @@ require File.expand_path('../spec_helper', __FILE__)
 
 describe "Rbemail" do
   include Rack::Test::Methods
+  let(:example_email) { "email@example.com" }
   let(:good_request) {
     {
       example_fieldarray: {
         example_name: "test",
-        example_email: "email@example.com",
+        example_email: example_email,
         example_message: "hello world",
         example_phone: "123-456-7890",
         example_rating: "4"
       }
     }
   }
+  let(:mailcatcher_endpoint) { "http://127.0.0.1:1080" }
 
   # set up mailcatcher for the tests
   before do
