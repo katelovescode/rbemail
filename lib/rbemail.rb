@@ -56,9 +56,9 @@ post '/' do
   # CHECK CONFIG FOR DRUPAL FORM ARRAY SYNTAX
   ########################################
   # if $fieldarray is present (e.g. we are using drupal, which arrays its form fields)
-  if defined?($fieldarray)
+  if defined?(@settings.fieldarray)
     # the form variable is the result array of the parameters that are found in the fieldarray
-    form = params[$fieldarray]
+    form = params[@settings.fieldarray]
   else
     # loop through the form fields and add each form field key, value to the form array variable
     form = params
@@ -69,12 +69,12 @@ post '/' do
   ########################################
 
   # test for missing required fields or extra fields that shouldn't be submitted
-  $combined = ($required + $optional + $botcatch)
+  $combined = (@settings.required + @settings.optional + @settings.botcatch)
   $testarray = form.keys
 
   # if a required field isn't submitted at all, kill it
-  if not $required & $testarray == $required
-    s = ("Required field(s) missing: " + ($required - $testarray).join(", ")).to_s
+  if not @settings.required & $testarray == @settings.required
+    s = ("Required field(s) missing: " + (@settiungs.required - $testarray).join(", ")).to_s
     $j = {error: s}.to_json
   elsif not ($testarray - $combined).empty?
     s = ("Extra field(s) submitted: " + ($testarray - $combined).join(", ")).to_s
@@ -88,7 +88,7 @@ post '/' do
     form.each do |k,v|
 
       # set required variable
-      r = $required.include? k
+      r = @settings.required.include? k
 
       # validate for empty required fields and bad emails
       f = 0
@@ -97,7 +97,7 @@ post '/' do
       end
 
       # validate all email fields as requested by configuration file
-      if $emailf.include? k
+      if @settings.emailf.include? k
         # email regex
         if (not v == "") && v[/\A([\w+\-].?)+@[a-z\d\-]+(\.[a-z]+)*\.[a-z]+\z/i] == nil
           f = 2 # error code for bad email format
@@ -108,22 +108,22 @@ post '/' do
       t = k.split(/[[:punct:]]/).map(&:capitalize).join(' ')
 
       # assign the Pony "from" value
-      if $f_from == k
+      if @settings.f_from == k
         from = v
       end
 
       # if Pony to value is assigned by form entry, assign the Pony "to" value
-      if $f_to.include? k
+      if @settings.f_to.include? k
         to = v
       end
 
       # assign the Pony "subject" value
-      if $f_subject.to_s == k
+      if @settings.f_subject.to_s == k
         subject = v
       end
 
       # concatenate all body fields to the single Pony "body" value with line breaks and titles
-      if $f_body.include? k
+      if @settings.f_body.include? k
         body << t + ": " + v + "\n"
       end
 
@@ -133,13 +133,13 @@ post '/' do
     end
 
     # if "from" value is an email address in the config, set "from"
-    if $f_from[/\A([\w+\-].?)+@[a-z\d\-]+(\.[a-z]+)*\.[a-z]+\z/i] != nil
-      from = $f_from
+    if @settings.f_from[/\A([\w+\-].?)+@[a-z\d\-]+(\.[a-z]+)*\.[a-z]+\z/i] != nil
+      from = @settings.f_from
     end
 
     # if the Pony "to" value is still unassigned (not a form field), assign Pony "to" field to string of email addresses in config file
     if to == ""
-      $f_to.each do |x|
+      @settings.f_to.each do |x|
         if not x[/\A([\w+\-].?)+@[a-z\d\-]+(\.[a-z]+)*\.[a-z]+\z/i] == nil
           $tomails.push(x)
         end
@@ -167,7 +167,7 @@ post '/' do
     end
 
     if sendemail
-      Pony.mail({to: to,from: from,subject: subject,body: body,via: $send_via,via_options: { address: $smtp_address,port: $smtp_port,user_name: $smtp_user,password: $smtp_pass,authentication: $smtp_auth,domain: $smtp_domain}})
+      Pony.mail({to: to,from: from,subject: subject,body: body,via: @settings.send_via,via_options: { address: @settings.smtp_address,port: @settings.smtp_port,user_name: @settings.smtp_user,password: @settings.smtp_pass,authentication: @settings.smtp_auth,domain: @settings.smtp_domain}})
     end
 
   end
