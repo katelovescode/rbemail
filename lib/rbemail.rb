@@ -102,7 +102,7 @@ class Rbemail < Sinatra::Base
         # set required variable
         r = $settings.required.include? k
 
-        # validate for empty required fields and bad emails
+        # validate for empty required fields
         f = 0
         if r == true && v == ""
           f = 1 # error code for missing required field
@@ -170,15 +170,15 @@ class Rbemail < Sinatra::Base
       # AFTER ALL VALIDATION, KILL OR PASS
       ########################################
 
-      sendemail = true
+      $sendemail = true
 
       $hashfields.each do |x|
         if x.values[4] != 0
-          sendemail = false
+          $sendemail = false
         end
       end
 
-      if sendemail
+      if $sendemail
         Pony.mail({to: to,from: from,subject: subject,body: body,via: $settings.send_via,via_options: { address: $settings.smtp_address,port: $settings.smtp_port,user_name: $settings.smtp_user,password: $settings.smtp_pass,authentication: $settings.smtp_auth,domain: $settings.smtp_domain}})
       end
 

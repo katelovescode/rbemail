@@ -49,6 +49,17 @@ describe Rbemail do
         }
       }
     }
+    let(:empty_required) {
+      {
+        example_fieldarray: {
+          example_name: "",
+          example_email: example_email,
+          example_message: "hello world",
+          example_phone: "123-456-7890",
+          example_rating: "4"
+        }
+      }
+    }
     let(:mailcatcher_endpoint) { "http://127.0.0.1:1080" }
 
     # set up mailcatcher for the tests
@@ -71,6 +82,15 @@ describe Rbemail do
       expect(last_response.status).to eq(200)
     end
 
+    it "produces a real email" do
+      post "/", good_request
+      uri = URI.parse("#{mailcatcher_endpoint}/messages")
+      response = Net::HTTP.get_response(uri)
+      messages = JSON.parse(response.body)
+      last_message = messages[0]
+      expect(last_message['sender']).to eq("<#{example_email}>")
+    end
+
     it "rejects a request that is missing a required field" do
       post "/", missing_required
       $json = JSON.parse $j
@@ -83,13 +103,9 @@ describe Rbemail do
       expect($json["error"]).to start_with "Extra field(s) submitted:"
     end
 
-    it "produces a real email" do
-      post "/", good_request
-      uri = URI.parse("#{mailcatcher_endpoint}/messages")
-      response = Net::HTTP.get_response(uri)
-      messages = JSON.parse(response.body)
-      last_message = messages[0]
-      expect(last_message['sender']).to eq("<#{example_email}>")
+    it "provides an error message to the javascript if a required field is empty" do
+      post "/", empty_required
+      expect($sendemail).to be false
     end
 
   end
@@ -124,6 +140,15 @@ describe Rbemail do
         example_testing: "this doesn't belong"
       }
     }
+    let(:empty_required) {
+      {
+        example_name: "",
+        example_email: example_email,
+        example_message: "hello world",
+        example_phone: "123-456-7890",
+        example_rating: "4",
+      }
+    }
     let(:mailcatcher_endpoint) { "http://127.0.0.1:1080" }
 
     # set up mailcatcher for the tests
@@ -156,6 +181,11 @@ describe Rbemail do
       post "/", extra_field
       $json = JSON.parse $j
       expect($json["error"]).to start_with "Extra field(s) submitted:"
+    end
+
+    it "provides an error message to the javascript if a required field is empty" do
+      post "/", empty_required
+      expect($sendemail).to be false
     end
 
     it "produces a real email" do
