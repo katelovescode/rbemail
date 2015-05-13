@@ -37,6 +37,18 @@ describe Rbemail do
         }
       }
     }
+    let(:extra_field) {
+      {
+        example_fieldarray: {
+          example_name: "test",
+          example_email: example_email,
+          example_message: "hello world",
+          example_phone: "123-456-7890",
+          example_rating: "4",
+          example_testing: "this doesn't belong"
+        }
+      }
+    }
     let(:mailcatcher_endpoint) { "http://127.0.0.1:1080" }
 
     # set up mailcatcher for the tests
@@ -63,6 +75,12 @@ describe Rbemail do
       post "/", missing_required
       $json = JSON.parse $j
       expect($json["error"]).to start_with "Required field(s) missing:"
+    end
+
+    it "rejects a request with an additional field" do
+      post "/", extra_field
+      $json = JSON.parse $j
+      expect($json["error"]).to start_with "Extra field(s) submitted:"
     end
 
     it "produces a real email" do
@@ -96,6 +114,16 @@ describe Rbemail do
         example_rating: "4"
       }
     }
+    let(:extra_field) {
+      {
+        example_name: "test",
+        example_email: example_email,
+        example_message: "hello world",
+        example_phone: "123-456-7890",
+        example_rating: "4",
+        example_testing: "this doesn't belong"
+      }
+    }
     let(:mailcatcher_endpoint) { "http://127.0.0.1:1080" }
 
     # set up mailcatcher for the tests
@@ -124,6 +152,11 @@ describe Rbemail do
       expect($json["error"]).to start_with "Required field(s) missing:"
     end
 
+    it "rejects a request with an additional field" do
+      post "/", extra_field
+      $json = JSON.parse $j
+      expect($json["error"]).to start_with "Extra field(s) submitted:"
+    end
 
     it "produces a real email" do
       post "/", good_request
