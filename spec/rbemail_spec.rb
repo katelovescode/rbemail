@@ -60,6 +60,17 @@ describe Rbemail do
         }
       }
     }
+    let(:bad_email) {
+      {
+        example_fieldarray: {
+          example_name: "test",
+          example_email: "email@whatev",
+          example_message: "hello world",
+          example_phone: "123-456-7890",
+          example_rating: "4"
+        }
+      }
+    }
     let(:mailcatcher_endpoint) { "http://127.0.0.1:1080" }
 
     # set up mailcatcher for the tests
@@ -108,6 +119,11 @@ describe Rbemail do
       expect($sendemail).to be false
     end
 
+    it "does not send if an email field doesn't validate" do
+      post "/", bad_email
+      expect($sendemail).to be false
+    end
+
   end
 
   context "field array is not present (e.g. hand-coded form)" do
@@ -149,6 +165,15 @@ describe Rbemail do
         example_rating: "4",
       }
     }
+    let(:bad_email) {
+      {
+        example_name: "test",
+        example_email: "email@whatev",
+        example_message: "hello world",
+        example_phone: "123-456-7890",
+        example_rating: "4",
+      }
+    }
     let(:mailcatcher_endpoint) { "http://127.0.0.1:1080" }
 
     # set up mailcatcher for the tests
@@ -171,6 +196,15 @@ describe Rbemail do
       expect(last_response.status).to eq(200)
     end
 
+    it "produces a real email" do
+      post "/", good_request
+      uri = URI.parse("#{mailcatcher_endpoint}/messages")
+      response = Net::HTTP.get_response(uri)
+      messages = JSON.parse(response.body)
+      last_message = messages[0]
+      expect(last_message['sender']).to eq("<#{example_email}>")
+    end
+
     it "rejects a request that is missing a required field" do
       post "/", missing_required
       $json = JSON.parse $j
@@ -188,13 +222,9 @@ describe Rbemail do
       expect($sendemail).to be false
     end
 
-    it "produces a real email" do
-      post "/", good_request
-      uri = URI.parse("#{mailcatcher_endpoint}/messages")
-      response = Net::HTTP.get_response(uri)
-      messages = JSON.parse(response.body)
-      last_message = messages[0]
-      expect(last_message['sender']).to eq("<#{example_email}>")
+    it "does not send if an email field doesn't validate" do
+      post "/", bad_email
+      expect($sendemail).to be false
     end
 
   end
