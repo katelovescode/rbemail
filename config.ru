@@ -6,4 +6,6 @@ disable :run, :reload
 
 require_relative 'lib/rbemail.rb'
 
-run Rbemail
+map "/" do
+  run Rbemail
+end
