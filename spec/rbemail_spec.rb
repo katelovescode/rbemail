@@ -103,7 +103,7 @@ describe Rbemail do
       expect($json["error"]).to start_with "Extra field(s) submitted:"
     end
 
-    it "provides an error message to the javascript if a required field is empty" do
+    it "does not send if a required field is empty" do
       post "/", empty_required
       expect($sendemail).to be false
     end
@@ -183,7 +183,7 @@ describe Rbemail do
       expect($json["error"]).to start_with "Extra field(s) submitted:"
     end
 
-    it "provides an error message to the javascript if a required field is empty" do
+    it "does not send if a required field is empty" do
       post "/", empty_required
       expect($sendemail).to be false
     end
