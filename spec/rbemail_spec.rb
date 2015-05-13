@@ -14,12 +14,22 @@ require File.expand_path('../spec_helper', __FILE__)
 describe Rbemail do
   include Rack::Test::Methods
 
-  context "field array is present, such as in drupal" do
+  context "field array is present (e.g. drupal)" do
     let(:example_email) { "email@example.com" }
     let(:good_request) {
       {
         example_fieldarray: {
           example_name: "test",
+          example_email: example_email,
+          example_message: "hello world",
+          example_phone: "123-456-7890",
+          example_rating: "4"
+        }
+      }
+    }
+    let(:missing_required) {
+      {
+        example_fieldarray: {
           example_email: example_email,
           example_message: "hello world",
           example_phone: "123-456-7890",
@@ -49,6 +59,12 @@ describe Rbemail do
       expect(last_response.status).to eq(200)
     end
 
+    it "rejects a request that is missing a required field" do
+      post "/", missing_required
+      $json = JSON.parse $j
+      expect($json["error"]).to start_with "Required field(s) missing:"
+    end
+
     it "produces a real email" do
       post "/", good_request
       uri = URI.parse("#{mailcatcher_endpoint}/messages")
@@ -60,12 +76,20 @@ describe Rbemail do
 
   end
 
-  context "field array is not present, such as in a hand-coded form" do
+  context "field array is not present (e.g. hand-coded form)" do
 
     let(:example_email) { "email@example.com" }
     let(:good_request) {
       {
         example_name: "test",
+        example_email: example_email,
+        example_message: "hello world",
+        example_phone: "123-456-7890",
+        example_rating: "4"
+      }
+    }
+    let(:missing_required) {
+      {
         example_email: example_email,
         example_message: "hello world",
         example_phone: "123-456-7890",
@@ -93,6 +117,13 @@ describe Rbemail do
       post "/", good_request
       expect(last_response.status).to eq(200)
     end
+
+    it "rejects a request that is missing a required field" do
+      post "/", missing_required
+      $json = JSON.parse $j
+      expect($json["error"]).to start_with "Required field(s) missing:"
+    end
+
 
     it "produces a real email" do
       post "/", good_request

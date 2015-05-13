@@ -86,7 +86,7 @@ class Rbemail < Sinatra::Base
 
     # if a required field isn't submitted at all, kill it
     if not $settings.required & $testarray == $settings.required
-      s = ("Required field(s) missing: " + (@settiungs.required - $testarray).join(", ")).to_s
+      s = ("Required field(s) missing: " + ($settings.required - $testarray).join(", ")).to_s
       $j = {error: s}.to_json
     elsif not ($testarray - $combined).empty?
       s = ("Extra field(s) submitted: " + ($testarray - $combined).join(", ")).to_s
