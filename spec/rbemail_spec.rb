@@ -11,7 +11,7 @@ require 'json'
 require File.expand_path('../spec_helper', __FILE__)
 
 
-describe "Rbemail" do
+describe Rbemail do
   include Rack::Test::Methods
 
   context "field array is present, such as in drupal" do
@@ -40,12 +40,12 @@ describe "Rbemail" do
     end
 
     def app
-      Sinatra::Application
+      Rbemail
     end
 
     it "accepts POST requests at root" do
       post "/", good_request
-      expect(last_response.status).to equal(200)
+      expect(last_response.status).to eq(200)
     end
 
     it "produces a real email" do
@@ -84,12 +84,12 @@ describe "Rbemail" do
     end
 
     def app
-      Sinatra::Application
+      Rbemail
     end
 
     it "accepts POST requests at root" do
       post "/", good_request
-      expect(last_response.status).to equal(200)
+      expect(last_response.status).to eq(200)
     end
 
     it "produces a real email" do

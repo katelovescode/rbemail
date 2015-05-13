@@ -6,4 +6,4 @@ disable :run, :reload
 
 require_relative 'lib/rbemail.rb'
 
-run Sinatra::Application
+run Rbemail
