@@ -57,7 +57,7 @@ module Config
 
   end
 
-  def change_config
-
+  def change_config(key, value)
+    $settings[key] = value
   end
 end

@@ -75,6 +75,7 @@ describe Rbemail do
 
     # set up mailcatcher for the tests
     before do
+      Rbemail::change_config('fieldarray',nil)
       `mailcatcher`
     end
 

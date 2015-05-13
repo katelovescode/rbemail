@@ -68,7 +68,7 @@ class Rbemail < Sinatra::Base
     # CHECK CONFIG FOR DRUPAL FORM ARRAY SYNTAX
     ########################################
     # if $fieldarray is present (e.g. we are using drupal, which arrays its form fields)
-    if defined?($settings.fieldarray)
+    if $settings.fieldarray!=nil
       # the form variable is the result array of the parameters that are found in the fieldarray
       form = params[$settings.fieldarray]
     else
