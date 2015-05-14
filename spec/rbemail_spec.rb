@@ -137,16 +137,20 @@ describe Rbemail do
     end
 
     it "assigns the 'to' value from a form field" do
-      configfix = ENV['REQUIRED'] + " example_to"
-      configfixsplit = configfix.chomp('"').reverse.chomp('"').reverse.split(" ")
+      fix = ENV['REQUIRED'] + " example_to"
+      fix = fix.chomp('"').reverse.chomp('"').reverse.split(" ")
       Rbemail::change_config('f_to','example_to')
-      Rbemail::change_config('required',configfixsplit)
+      Rbemail::change_config('required',fix)
       post "/", to_form_field
       $hashfields.each do |x|
         if x["fieldname"] == "example_to"
           expect(x["value"]).to eq("#{to_form_field[:example_fieldarray][:example_to]}")
         end
       end
+      tofixback = ENV['F_TO'].chomp('"').reverse.chomp('"').reverse.split(" ")
+      reqfixback = ENV['REQUIRED'].chomp('"').reverse.chomp('"').reverse.split(" ")
+      Rbemail::change_config('f_to',tofixback)
+      Rbemail::change_config('required',reqfixback)
     end
 
   end
@@ -231,7 +235,7 @@ describe Rbemail do
       expect(last_response.status).to eq(200)
     end
 
-    it "produces a real email" do
+    it "produces a real email on a good request" do
       post "/", good_request
       uri = URI.parse("#{mailcatcher_endpoint}/messages")
       response = Net::HTTP.get_response(uri)
@@ -244,6 +248,10 @@ describe Rbemail do
       post "/", missing_required
       $json = JSON.parse $j
       expect($json["error"]).to start_with "Required field(s) missing:"
+      uri = URI.parse("#{mailcatcher_endpoint}/messages")
+      response = Net::HTTP.get_response(uri)
+      messages = JSON.parse(response.body)
+      expect(messages[0]).to be nil
     end
 
     it "rejects a request with an additional field" do
@@ -263,16 +271,21 @@ describe Rbemail do
     end
 
     it "assigns the 'to' value from a form field" do
-      configfix = ENV['REQUIRED'] + " example_to"
-      configfixsplit = configfix.chomp('"').reverse.chomp('"').reverse.split(" ")
+      fix = ENV['REQUIRED'] + " example_to"
+      fix = fix.chomp('"').reverse.chomp('"').reverse.split(" ")
       Rbemail::change_config('f_to','example_to')
-      Rbemail::change_config('required',configfixsplit)
+      Rbemail::change_config('required',fix)
       post "/", to_form_field
       $hashfields.each do |x|
         if x["fieldname"] == "example_to"
           expect(x["value"]).to eq("#{to_form_field[:example_to]}")
         end
       end
+      tofixback = ENV['F_TO'].chomp('"').reverse.chomp('"').reverse.split(" ")
+      reqfixback = ENV['REQUIRED'].chomp('"').reverse.chomp('"').reverse.split(" ")
+      Rbemail::change_config('f_to',tofixback)
+      Rbemail::change_config('required',reqfixback)
+
     end
 
   end
