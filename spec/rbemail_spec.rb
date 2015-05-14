@@ -163,17 +163,31 @@ describe Rbemail do
       fix = fix.chomp('"').reverse.chomp('"').reverse.split(" ")
       Rbemail::change_config('f_to','example_to_email')
       Rbemail::change_config('required',fix)
+
       post "/", to_form_field
       $hashfields.each do |x|
         if x["fieldname"] == "example_to_email"
           expect(x["value"]).to eq("#{to_form_field[:example_fieldarray][:example_to_email]}")
         end
       end
+      expect(last_message['sender']).to eq("<#{example_from_email}>")
+
       tofixback = ENV['F_TO'].chomp('"').reverse.chomp('"').reverse.split(" ")
       reqfixback = ENV['REQUIRED'].chomp('"').reverse.chomp('"').reverse.split(" ")
       Rbemail::change_config('f_to',tofixback)
       Rbemail::change_config('required',reqfixback)
+    end
+
+    it "accepts a request with multiple 'to' addresses" do
+      fix = "email@example1.com email@example2.com"
+      fix = fix.chomp('"').reverse.chomp('"').reverse.split(" ")
+      Rbemail::change_config('f_to',fix)
+
+      post "/", good_request
       expect(last_message['sender']).to eq("<#{example_from_email}>")
+
+      tofixback = ENV['F_TO'].chomp('"').reverse.chomp('"').reverse.split(" ")
+      Rbemail::change_config('f_to',tofixback)
     end
 
   end
@@ -314,17 +328,31 @@ describe Rbemail do
       fix = fix.chomp('"').reverse.chomp('"').reverse.split(" ")
       Rbemail::change_config('f_to','example_to_email')
       Rbemail::change_config('required',fix)
+
       post "/", to_form_field
       $hashfields.each do |x|
         if x["fieldname"] == "example_to_email"
           expect(x["value"]).to eq("#{to_form_field[:example_to_email]}")
         end
       end
+      expect(last_message['sender']).to eq("<#{example_from_email}>")
+
       tofixback = ENV['F_TO'].chomp('"').reverse.chomp('"').reverse.split(" ")
       reqfixback = ENV['REQUIRED'].chomp('"').reverse.chomp('"').reverse.split(" ")
       Rbemail::change_config('f_to',tofixback)
       Rbemail::change_config('required',reqfixback)
+    end
+
+    it "accepts a request with multiple 'to' addresses" do
+      fix = "email@example1.com email@example2.com"
+      fix = fix.chomp('"').reverse.chomp('"').reverse.split(" ")
+      Rbemail::change_config('f_to',fix)
+
+      post "/", good_request
       expect(last_message['sender']).to eq("<#{example_from_email}>")
+
+      tofixback = ENV['F_TO'].chomp('"').reverse.chomp('"').reverse.split(" ")
+      Rbemail::change_config('f_to',tofixback)
     end
 
   end
