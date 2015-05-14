@@ -102,17 +102,15 @@ class Rbemail < Sinatra::Base
         # initialize f for passing or error codes
         f = 0
 
-        # set required variable
+        # true if this is in the required list
         r = $settings.required.include? k
 
-        f = 1 if (r == true and v == "") # error code for empty required field
+        # error code for empty required field
+        f = 1 if (r == true and v == "")
 
-        # validate all email fields as requested by configuration file
+        # error code for bad email format
         if $settings.emailf.include? k
-          # email regex
-          if (not v == "") and v[/\A([\w+\-].?)+@[a-z\d\-]+(\.[a-z]+)*\.[a-z]+\z/i] == nil
-            f = 2 # error code for bad email format
-          end
+          f = 2 if (not v == "") and v[/\A([\w+\-].?)+@[a-z\d\-]+(\.[a-z]+)*\.[a-z]+\z/i] == nil
         end
 
         # "Prettify" the title - take out any HTML tag spacing punctuation and change to spaces, capitalize to make it more readable
