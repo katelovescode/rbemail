@@ -114,23 +114,14 @@ class Rbemail < Sinatra::Base
         end
         f = 3 if $settings.botcatch.join == k #caught a bot
 
-        # "Prettify" the title - take out any HTML tag spacing punctuation and change to spaces, capitalize to make it more readable
+        # "Prettify" the title of the form field - take out any HTML tag spacing punctuation and change to spaces, capitalize to make it more readable
         t = k.split(/[[:punct:]]/).map(&:capitalize).join(' ')
 
-        # assign the Pony "from" value
+        # assign the Pony values, if they are form fields (body concatenates all body fields with line breaks)
         from = v if $settings.f_from == k
-
-        # if Pony to value is assigned by form entry, assign the Pony "to" value
         to = v if $settings.f_to.include? k
-
-        # assign the Pony "subject" value
         subject = v if $settings.f_subject.to_s == k
-
-        # concatenate all body fields to the single Pony "body" value with line breaks and titles
-        if $settings.f_body.include? k
-          body << t + ": " + v + "\n"
-        end
-
+        body << t + ": " + v + "\n" if $settings.f_body.include? k
 
         # create a field object and add it to the $hashfields array using the method above
         field k,v,r,t,f
