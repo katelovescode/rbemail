@@ -40,7 +40,7 @@ module Config
     settings[:smtp_domain] = ENV['SMTP_DOMAIN'].chomp('"').reverse.chomp('"').reverse
 
     $settings = OpenStruct.new settings
-
+    
   end
 
   def change_config(key, value)

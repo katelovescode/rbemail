@@ -165,7 +165,6 @@ class Rbemail < Sinatra::Base
 
       $j = $hashfields.to_json
 
-
       ########################################
       # AFTER ALL VALIDATION, KILL OR PASS
       ########################################

@@ -162,7 +162,7 @@ describe Rbemail do
         example_email: example_email,
         example_message: "hello world",
         example_phone: "123-456-7890",
-        example_rating: "4",
+        example_rating: "4"
       }
     }
     let(:bad_email) {
@@ -171,7 +171,17 @@ describe Rbemail do
         example_email: "email@whatev",
         example_message: "hello world",
         example_phone: "123-456-7890",
-        example_rating: "4",
+        example_rating: "4"
+      }
+    }
+    let(:to_form_field) {
+      {
+        example_name: "test",
+        example_email: "email@whatev",
+        example_message: "hello world",
+        example_phone: "123-456-7890",
+        example_to: "to@test.com",
+        example_rating: "4"
       }
     }
     let(:mailcatcher_endpoint) { "http://127.0.0.1:1080" }
@@ -225,6 +235,19 @@ describe Rbemail do
     it "does not send if an email field doesn't validate" do
       post "/", bad_email
       expect($sendemail).to be false
+    end
+
+    it "assigns the 'to' value from a form field" do
+      configfix = ENV['REQUIRED'] + " example_to"
+      configfixsplit = configfix.chomp('"').reverse.chomp('"').reverse.split(" ")
+      Rbemail::change_config('f_to','example_to')
+      Rbemail::change_config('required',configfixsplit)
+      post "/", to_form_field
+      $hashfields.each do |x|
+        if x["fieldname"] == "example_to"
+          expect(x["value"]).to eq("#{to_form_field[:example_to]}")
+        end
+      end
     end
 
   end
