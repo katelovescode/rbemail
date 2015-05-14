@@ -121,9 +121,7 @@ class Rbemail < Sinatra::Base
         from = v if $settings.f_from == k
 
         # if Pony to value is assigned by form entry, assign the Pony "to" value
-        if $settings.f_to.include? k
-          to = v
-        end
+        to = v if $settings.f_to.include? k
 
         # assign the Pony "subject" value
         if $settings.f_subject.to_s == k
