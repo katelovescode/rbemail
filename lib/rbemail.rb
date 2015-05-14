@@ -139,6 +139,10 @@ class Rbemail < Sinatra::Base
           body << t + ": " + v + "\n"
         end
 
+        if $settings.botcatch.join == k
+          f = 3 # error code for bot filling out form
+        end
+
         # create a field object and add it to the $hashfields array using the method above
         field k,v,r,t,f
 

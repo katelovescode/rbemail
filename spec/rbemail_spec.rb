@@ -71,6 +71,18 @@ describe Rbemail do
         }
       }
     }
+    let(:bot_field) {
+      {
+        example_fieldarray: {
+          example_name: "test",
+          example_from_email: example_from_email,
+          example_message: "hello world",
+          example_phone: "123-456-7890",
+          example_rating: "4",
+          example_botfield: "thisisabot"
+        }
+      }
+    }
     let(:to_form_field) {
       {
         example_fieldarray: {
@@ -136,6 +148,12 @@ describe Rbemail do
 
     it "rejects a request if an email field doesn't validate" do
       post "/", bad_email
+      expect($sendemail).to be false
+      expect(last_message).to be nil
+    end
+
+    it "rejects a request if the botfield is filled out" do
+      post "/", bot_field
       expect($sendemail).to be false
       expect(last_message).to be nil
     end
@@ -214,7 +232,7 @@ describe Rbemail do
         example_from_email: example_from_email,
         example_message: "hello world",
         example_phone: "123-456-7890",
-        example_rating: "4"
+        example_rating: "4",
         example_botfield: "thisisabot"
       }
     }
