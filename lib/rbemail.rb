@@ -117,9 +117,7 @@ class Rbemail < Sinatra::Base
         t = k.split(/[[:punct:]]/).map(&:capitalize).join(' ')
 
         # assign the Pony "from" value
-        if $settings.f_from == k
-          from = v
-        end
+        from = v if $settings.f_from == k
 
         # if Pony to value is assigned by form entry, assign the Pony "to" value
         if $settings.f_to.include? k
