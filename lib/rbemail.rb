@@ -165,11 +165,7 @@ class Rbemail < Sinatra::Base
 
       $sendemail = true
 
-      $hashfields.each do |x|
-        if x.values[4] != 0
-          $sendemail = false
-        end
-      end
+      $hashfields.each { |x| $sendemail = false if x.values[4] != 0 }
 
       if $sendemail
         Pony.mail({to: to,from: from,subject: subject,body: body,via: $settings.send_via,via_options: { address: $settings.smtp_address,port: $settings.smtp_port,user_name: $settings.smtp_user,password: $settings.smtp_pass,authentication: $settings.smtp_auth,domain: $settings.smtp_domain}})
