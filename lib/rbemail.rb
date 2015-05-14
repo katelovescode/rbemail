@@ -150,9 +150,7 @@ class Rbemail < Sinatra::Base
       # if the Pony "to" value is still unassigned (not a form field), assign Pony "to" field to string of email addresses in config file
       if to == ""
         $settings.f_to.each do |x|
-          if x =~ emailformat
-            $tomails.push(x)
-          end
+          $tomails.push(x) if x =~ emailformat
         end
         to = $tomails.join(",")
       end
