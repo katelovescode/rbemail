@@ -128,19 +128,19 @@ describe Rbemail do
       expect(last_message).to be nil
     end
 
-    it "does not send if a required field is empty" do
+    it "rejects a request if a required field is empty" do
       post "/", empty_required
       expect($sendemail).to be false
       expect(last_message).to be nil
     end
 
-    it "does not send if an email field doesn't validate" do
+    it "rejects a request if an email field doesn't validate" do
       post "/", bad_email
       expect($sendemail).to be false
       expect(last_message).to be nil
     end
 
-    it "assigns the 'to' value from a form field" do
+    it "accepts a request with the 'to' value assigned from a form field" do
       fix = ENV['REQUIRED'] + " example_to_email"
       fix = fix.chomp('"').reverse.chomp('"').reverse.split(" ")
       Rbemail::change_config('f_to','example_to_email')
@@ -208,6 +208,16 @@ describe Rbemail do
         example_rating: "4"
       }
     }
+    let(:bot_field) {
+      {
+        example_name: "test",
+        example_from_email: example_from_email,
+        example_message: "hello world",
+        example_phone: "123-456-7890",
+        example_rating: "4"
+        example_botfield: "thisisabot"
+      }
+    }
     let(:to_form_field) {
       {
         example_name: "test",
@@ -263,19 +273,25 @@ describe Rbemail do
       expect(last_message).to be nil
     end
 
-    it "does not send if a required field is empty" do
+    it "rejects a request if a required field is empty" do
       post "/", empty_required
       expect($sendemail).to be false
       expect(last_message).to be nil
     end
 
-    it "does not send if an email field doesn't validate" do
+    it "rejects a request if an email field doesn't validate" do
       post "/", bad_email
       expect($sendemail).to be false
       expect(last_message).to be nil
     end
 
-    it "assigns the 'to' value from a form field" do
+    it "rejects a request if the botfield is filled out" do
+      post "/", bot_field
+      expect($sendemail).to be false
+      expect(last_message).to be nil
+    end
+
+    it "accepts a request with the 'to' value assigned from a form field" do
       fix = ENV['REQUIRED'] + " example_to_email"
       fix = fix.chomp('"').reverse.chomp('"').reverse.split(" ")
       Rbemail::change_config('f_to','example_to_email')
