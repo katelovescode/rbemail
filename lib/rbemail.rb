@@ -51,6 +51,7 @@ class Rbemail < Sinatra::Base
     to_array = []
     $hashfields = []
     $tomails = []
+    emailformat = /\A([\w+\-].?)+@[a-z\d\-]+(\.[a-z]+)*\.[a-z]+\z/i
 
     ########################################
     # FIELD FUNCTION
@@ -105,13 +106,13 @@ class Rbemail < Sinatra::Base
         # true if this is in the required list
         r = $settings.required.include? k
 
-        # error code for empty required field
-        f = 1 if (r == true and v == "")
+        # error codes
 
-        # error code for bad email format
+        f = 1 if (r == true and v == "") # empty required field
         if $settings.emailf.include? k
-          f = 2 if (not v == "") and v[/\A([\w+\-].?)+@[a-z\d\-]+(\.[a-z]+)*\.[a-z]+\z/i] == nil
+          f = 2 if v != "" and not v =~ emailformat
         end
+        f = 3 if $settings.botcatch.join == k #caught a bot
 
         # "Prettify" the title - take out any HTML tag spacing punctuation and change to spaces, capitalize to make it more readable
         t = k.split(/[[:punct:]]/).map(&:capitalize).join(' ')
@@ -134,9 +135,6 @@ class Rbemail < Sinatra::Base
           body << t + ": " + v + "\n"
         end
 
-        if $settings.botcatch.join == k
-          f = 3 # error code for bot filling out form
-        end
 
         # create a field object and add it to the $hashfields array using the method above
         field k,v,r,t,f
