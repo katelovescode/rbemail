@@ -124,9 +124,7 @@ class Rbemail < Sinatra::Base
         to = v if $settings.f_to.include? k
 
         # assign the Pony "subject" value
-        if $settings.f_subject.to_s == k
-          subject = v
-        end
+        subject = v if $settings.f_subject.to_s == k
 
         # concatenate all body fields to the single Pony "body" value with line breaks and titles
         if $settings.f_body.include? k
