@@ -99,19 +99,18 @@ class Rbemail < Sinatra::Base
       # loop through the form variable and add in required and title elements
       form.each do |k,v|
 
+        # initialize f for passing or error codes
+        f = 0
+
         # set required variable
         r = $settings.required.include? k
 
-        # validate for empty required fields
-        f = 0
-        if r == true && v == ""
-          f = 1 # error code for missing required field
-        end
+        f = 1 if (r == true and v == "") # error code for empty required field
 
         # validate all email fields as requested by configuration file
         if $settings.emailf.include? k
           # email regex
-          if (not v == "") && v[/\A([\w+\-].?)+@[a-z\d\-]+(\.[a-z]+)*\.[a-z]+\z/i] == nil
+          if (not v == "") and v[/\A([\w+\-].?)+@[a-z\d\-]+(\.[a-z]+)*\.[a-z]+\z/i] == nil
             f = 2 # error code for bad email format
           end
         end
