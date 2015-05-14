@@ -15,12 +15,12 @@ describe Rbemail do
   include Rack::Test::Methods
 
   context "field array is present (e.g. drupal)" do
-    let(:example_email) { "email@example.com" }
+    let(:example_from_email) { "email@example.com" }
     let(:good_request) {
       {
         example_fieldarray: {
           example_name: "test",
-          example_email: example_email,
+          example_from_email: example_from_email,
           example_message: "hello world",
           example_phone: "123-456-7890",
           example_rating: "4"
@@ -30,7 +30,7 @@ describe Rbemail do
     let(:missing_required) {
       {
         example_fieldarray: {
-          example_email: example_email,
+          example_from_email: example_from_email,
           example_message: "hello world",
           example_phone: "123-456-7890",
           example_rating: "4"
@@ -41,7 +41,7 @@ describe Rbemail do
       {
         example_fieldarray: {
           example_name: "test",
-          example_email: example_email,
+          example_from_email: example_from_email,
           example_message: "hello world",
           example_phone: "123-456-7890",
           example_rating: "4",
@@ -53,7 +53,7 @@ describe Rbemail do
       {
         example_fieldarray: {
           example_name: "",
-          example_email: example_email,
+          example_from_email: example_from_email,
           example_message: "hello world",
           example_phone: "123-456-7890",
           example_rating: "4"
@@ -64,7 +64,7 @@ describe Rbemail do
       {
         example_fieldarray: {
           example_name: "test",
-          example_email: "email@whatev",
+          example_from_email: "email@whatev",
           example_message: "hello world",
           example_phone: "123-456-7890",
           example_rating: "4"
@@ -75,15 +75,19 @@ describe Rbemail do
       {
         example_fieldarray: {
           example_name: "test",
-          example_email: "email@whatev",
+          example_from_email: example_from_email,
           example_message: "hello world",
           example_phone: "123-456-7890",
-          example_to: "test@test.com",
+          example_to_email: "test@test.com",
           example_rating: "4"
         }
       }
     }
     let(:mailcatcher_endpoint) { "http://127.0.0.1:1080" }
+    let(:uri) { URI.parse("#{mailcatcher_endpoint}/messages") }
+    let(:response) { Net::HTTP.get_response(uri) }
+    let(:messages) { JSON.parse(response.body) }
+    let(:last_message) { messages[0] }
 
     # set up mailcatcher for the tests
     before do
@@ -107,61 +111,62 @@ describe Rbemail do
 
     it "produces a real email" do
       post "/", good_request
-      uri = URI.parse("#{mailcatcher_endpoint}/messages")
-      response = Net::HTTP.get_response(uri)
-      messages = JSON.parse(response.body)
-      last_message = messages[0]
-      expect(last_message['sender']).to eq("<#{example_email}>")
+      expect(last_message['sender']).to eq("<#{example_from_email}>")
     end
 
     it "rejects a request that is missing a required field" do
       post "/", missing_required
       $json = JSON.parse $j
       expect($json["error"]).to start_with "Required field(s) missing:"
+      expect(last_message).to be nil
     end
 
     it "rejects a request with an additional field" do
       post "/", extra_field
       $json = JSON.parse $j
       expect($json["error"]).to start_with "Extra field(s) submitted:"
+      expect(last_message).to be nil
     end
 
     it "does not send if a required field is empty" do
       post "/", empty_required
       expect($sendemail).to be false
+      expect(last_message).to be nil
     end
 
     it "does not send if an email field doesn't validate" do
       post "/", bad_email
       expect($sendemail).to be false
+      expect(last_message).to be nil
     end
 
     it "assigns the 'to' value from a form field" do
-      fix = ENV['REQUIRED'] + " example_to"
+      fix = ENV['REQUIRED'] + " example_to_email"
       fix = fix.chomp('"').reverse.chomp('"').reverse.split(" ")
-      Rbemail::change_config('f_to','example_to')
+      Rbemail::change_config('f_to','example_to_email')
       Rbemail::change_config('required',fix)
       post "/", to_form_field
       $hashfields.each do |x|
-        if x["fieldname"] == "example_to"
-          expect(x["value"]).to eq("#{to_form_field[:example_fieldarray][:example_to]}")
+        if x["fieldname"] == "example_to_email"
+          expect(x["value"]).to eq("#{to_form_field[:example_fieldarray][:example_to_email]}")
         end
       end
       tofixback = ENV['F_TO'].chomp('"').reverse.chomp('"').reverse.split(" ")
       reqfixback = ENV['REQUIRED'].chomp('"').reverse.chomp('"').reverse.split(" ")
       Rbemail::change_config('f_to',tofixback)
       Rbemail::change_config('required',reqfixback)
+      expect(last_message['sender']).to eq("<#{example_from_email}>")
     end
 
   end
 
   context "field array is not present (e.g. hand-coded form)" do
 
-    let(:example_email) { "email@example.com" }
+    let(:example_from_email) { "email@example.com" }
     let(:good_request) {
       {
         example_name: "test",
-        example_email: example_email,
+        example_from_email: example_from_email,
         example_message: "hello world",
         example_phone: "123-456-7890",
         example_rating: "4"
@@ -169,7 +174,7 @@ describe Rbemail do
     }
     let(:missing_required) {
       {
-        example_email: example_email,
+        example_from_email: example_from_email,
         example_message: "hello world",
         example_phone: "123-456-7890",
         example_rating: "4"
@@ -178,7 +183,7 @@ describe Rbemail do
     let(:extra_field) {
       {
         example_name: "test",
-        example_email: example_email,
+        example_from_email: example_from_email,
         example_message: "hello world",
         example_phone: "123-456-7890",
         example_rating: "4",
@@ -188,7 +193,7 @@ describe Rbemail do
     let(:empty_required) {
       {
         example_name: "",
-        example_email: example_email,
+        example_from_email: example_from_email,
         example_message: "hello world",
         example_phone: "123-456-7890",
         example_rating: "4"
@@ -197,7 +202,7 @@ describe Rbemail do
     let(:bad_email) {
       {
         example_name: "test",
-        example_email: "email@whatev",
+        example_from_email: "email@whatev",
         example_message: "hello world",
         example_phone: "123-456-7890",
         example_rating: "4"
@@ -206,14 +211,18 @@ describe Rbemail do
     let(:to_form_field) {
       {
         example_name: "test",
-        example_email: "email@whatev",
+        example_from_email: example_from_email,
         example_message: "hello world",
         example_phone: "123-456-7890",
-        example_to: "to@test.com",
+        example_to_email: "to@test.com",
         example_rating: "4"
       }
     }
     let(:mailcatcher_endpoint) { "http://127.0.0.1:1080" }
+    let(:uri) { URI.parse("#{mailcatcher_endpoint}/messages") }
+    let(:response) { Net::HTTP.get_response(uri) }
+    let(:messages) { JSON.parse(response.body) }
+    let(:last_message) { messages[0] }
 
     # set up mailcatcher for the tests
     before do
@@ -237,55 +246,51 @@ describe Rbemail do
 
     it "produces a real email on a good request" do
       post "/", good_request
-      uri = URI.parse("#{mailcatcher_endpoint}/messages")
-      response = Net::HTTP.get_response(uri)
-      messages = JSON.parse(response.body)
-      last_message = messages[0]
-      expect(last_message['sender']).to eq("<#{example_email}>")
+      expect(last_message['sender']).to eq("<#{example_from_email}>")
     end
 
     it "rejects a request that is missing a required field" do
       post "/", missing_required
       $json = JSON.parse $j
       expect($json["error"]).to start_with "Required field(s) missing:"
-      uri = URI.parse("#{mailcatcher_endpoint}/messages")
-      response = Net::HTTP.get_response(uri)
-      messages = JSON.parse(response.body)
-      expect(messages[0]).to be nil
+      expect(last_message).to be nil
     end
 
     it "rejects a request with an additional field" do
       post "/", extra_field
       $json = JSON.parse $j
       expect($json["error"]).to start_with "Extra field(s) submitted:"
+      expect(last_message).to be nil
     end
 
     it "does not send if a required field is empty" do
       post "/", empty_required
       expect($sendemail).to be false
+      expect(last_message).to be nil
     end
 
     it "does not send if an email field doesn't validate" do
       post "/", bad_email
       expect($sendemail).to be false
+      expect(last_message).to be nil
     end
 
     it "assigns the 'to' value from a form field" do
-      fix = ENV['REQUIRED'] + " example_to"
+      fix = ENV['REQUIRED'] + " example_to_email"
       fix = fix.chomp('"').reverse.chomp('"').reverse.split(" ")
-      Rbemail::change_config('f_to','example_to')
+      Rbemail::change_config('f_to','example_to_email')
       Rbemail::change_config('required',fix)
       post "/", to_form_field
       $hashfields.each do |x|
-        if x["fieldname"] == "example_to"
-          expect(x["value"]).to eq("#{to_form_field[:example_to]}")
+        if x["fieldname"] == "example_to_email"
+          expect(x["value"]).to eq("#{to_form_field[:example_to_email]}")
         end
       end
       tofixback = ENV['F_TO'].chomp('"').reverse.chomp('"').reverse.split(" ")
       reqfixback = ENV['REQUIRED'].chomp('"').reverse.chomp('"').reverse.split(" ")
       Rbemail::change_config('f_to',tofixback)
       Rbemail::change_config('required',reqfixback)
-
+      expect(last_message['sender']).to eq("<#{example_from_email}>")
     end
 
   end

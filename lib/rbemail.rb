@@ -149,6 +149,10 @@ class Rbemail < Sinatra::Base
         from = $settings.f_from
       end
 
+      if subject == ""
+        subject = $settings.f_subject.to_s
+      end
+
       # if the Pony "to" value is still unassigned (not a form field), assign Pony "to" field to string of email addresses in config file
       if to == ""
         $settings.f_to.each do |x|
