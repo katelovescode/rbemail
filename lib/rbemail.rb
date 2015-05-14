@@ -142,9 +142,7 @@ class Rbemail < Sinatra::Base
       end
 
       # if "from" value is an email address in the config, set "from"
-      if $settings.f_from[/\A([\w+\-].?)+@[a-z\d\-]+(\.[a-z]+)*\.[a-z]+\z/i] != nil
-        from = $settings.f_from
-      end
+      from = $settings.f_from if $settings.f_from =~ emailformat
 
       if subject == ""
         subject = $settings.f_subject.to_s
