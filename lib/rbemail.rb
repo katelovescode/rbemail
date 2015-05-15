@@ -19,9 +19,6 @@ class Rbemail < Sinatra::Base
   # upon posting a form at the root page
   post '/' do
     cross_origin
-    ########################################
-    # GLOBALS
-    ########################################
 
     # global variables and empty arrays
     form = []
@@ -34,11 +31,8 @@ class Rbemail < Sinatra::Base
     $tomails = []
     emailformat = /\A([\w+\-].?)+@[a-z\d\-]+(\.[a-z]+)*\.[a-z]+\z/i
 
-    ########################################
-    # FIELD FUNCTION
-    ########################################
-
-    def field(*args) # set up a class to process each form field into an object
+    # field method
+    def field(*args)
       @fieldname, @value, @required, @title, @formpass = args
       $symbols = ["fieldname", "value", "required", "title", "formpass"] # for generating JSON objects
       $entries = [@fieldname, @value, @required, @title, @formpass] # for generating JSON objects and email fields
@@ -46,15 +40,8 @@ class Rbemail < Sinatra::Base
       $hashfields.push($h) # push all field entries in an array of hashes to be output as JSON
     end
 
-    ########################################
-    # CHECK CONFIG FOR DRUPAL FORM ARRAY SYNTAX
-    ########################################
     # if $fieldarray is present (e.g. we are using drupal, which arrays its form fields)
     $settings.fieldarray!=nil ? form = params[$settings.fieldarray] : form = params
-
-    ########################################
-    # VALIDATE DEVELOPER CONFIGURATION
-    ########################################
 
     # test for missing required fields or extra fields that shouldn't be submitted
     $combined = ($settings.required + $settings.optional + $settings.botcatch)
@@ -68,17 +55,15 @@ class Rbemail < Sinatra::Base
       s = ("Extra field(s) submitted: " + ($testarray - $combined).join(", ")).to_s
       $j = {error: s}.to_json
     else
-      ########################################
-      # VALIDATE FORM SUBMISSION AND PUSH TO JSON & PONY
-      ########################################
 
+      # prep to send
       # loop through the form variable and add in required and title elements
       form.each do |k,v|
 
-        # true if this is in the required list
+        # r variable - true if this is in the required list
         r = $settings.required.include? k
 
-        # error codes
+        # f variable - error codes
         f = 0
         f = 1 if (r == true and v == "") # empty required field
         if $settings.emailf.include? k
@@ -86,7 +71,7 @@ class Rbemail < Sinatra::Base
         end
         f = 3 if $settings.botcatch.join == k #caught a bot
 
-        # "Prettify" the title of the form field - take out any HTML tag spacing punctuation and change to spaces, capitalize to make it more readable
+        # t variable - "Prettify" the title of the form field
         t = k.split(/[[:punct:]]/).map(&:capitalize).join(' ')
 
         # assign the Pony values, if they are form fields (body concatenates all body fields with line breaks)
@@ -112,16 +97,10 @@ class Rbemail < Sinatra::Base
         to = $tomails.join(",")
       end
 
-      ########################################
-      # WRITE TO JSON
-      ########################################
-
+      # write to json
       $j = $hashfields.to_json
 
-      ########################################
-      # AFTER ALL VALIDATION, KILL OR PASS
-      ########################################
-
+      # after all validation, kill or pass
       $sendemail = true
 
       $hashfields.each { |x| $sendemail = false if x.values[4] != 0 }
