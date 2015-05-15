@@ -16,31 +16,9 @@ class Rbemail < Sinatra::Base
   set :port, 9393
   set :root, File.expand_path("..", File.dirname(__FILE__))
 
-  ########################################
-  # TESTING ERB TEMPLATES W/ FORMS - USING BROWSER
-  ########################################
-
-  # get '/' do
-  #   # this is for testing non-drupal form names
-  #   # erb :email_form
-  #
-  #   erb :drupal_form
-  # end
-
-  ########################################
-  # FORM POST ACTION
-  ########################################
-
-  # get '/' do
-  #   "hello world"
-  # end
-
   # upon posting a form at the root page
   post '/' do
     cross_origin
-    ########################################
-    # GLOBALS
-    ########################################
 
     # global variables and empty arrays
     form = []
@@ -51,12 +29,10 @@ class Rbemail < Sinatra::Base
     to_array = []
     $hashfields = []
     $tomails = []
+    emailformat = /\A([\w+\-].?)+@[a-z\d\-]+(\.[a-z]+)*\.[a-z]+\z/i
 
-    ########################################
-    # FIELD FUNCTION
-    ########################################
-
-    def field(*args) # set up a class to process each form field into an object
+    # field method
+    def field(*args)
       @fieldname, @value, @required, @title, @formpass = args
       $symbols = ["fieldname", "value", "required", "title", "formpass"] # for generating JSON objects
       $entries = [@fieldname, @value, @required, @title, @formpass] # for generating JSON objects and email fields
@@ -64,21 +40,8 @@ class Rbemail < Sinatra::Base
       $hashfields.push($h) # push all field entries in an array of hashes to be output as JSON
     end
 
-    ########################################
-    # CHECK CONFIG FOR DRUPAL FORM ARRAY SYNTAX
-    ########################################
     # if $fieldarray is present (e.g. we are using drupal, which arrays its form fields)
-    if $settings.fieldarray!=nil
-      # the form variable is the result array of the parameters that are found in the fieldarray
-      form = params[$settings.fieldarray]
-    else
-      # loop through the form fields and add each form field key, value to the form array variable
-      form = params
-    end
-
-    ########################################
-    # VALIDATE DEVELOPER CONFIGURATION
-    ########################################
+    $settings.fieldarray!=nil ? form = params[$settings.fieldarray] : form = params
 
     # test for missing required fields or extra fields that shouldn't be submitted
     $combined = ($settings.required + $settings.optional + $settings.botcatch)
@@ -86,58 +49,36 @@ class Rbemail < Sinatra::Base
 
     # if a required field isn't submitted at all, kill it
     if not $settings.required & $testarray == $settings.required
-      s = ("Required field(s) missing: " + (@settiungs.required - $testarray).join(", ")).to_s
+      s = ("Required field(s) missing: " + ($settings.required - $testarray).join(", ")).to_s
       $j = {error: s}.to_json
     elsif not ($testarray - $combined).empty?
       s = ("Extra field(s) submitted: " + ($testarray - $combined).join(", ")).to_s
       $j = {error: s}.to_json
     else
-      ########################################
-      # VALIDATE FORM SUBMISSION AND PUSH TO JSON & PONY
-      ########################################
 
+      # prep to send
       # loop through the form variable and add in required and title elements
       form.each do |k,v|
 
-        # set required variable
+        # r variable - true if this is in the required list
         r = $settings.required.include? k
 
-        # validate for empty required fields and bad emails
+        # f variable - error codes
         f = 0
-        if r == true && v == ""
-          f = 1 # error code for missing required field
-        end
-
-        # validate all email fields as requested by configuration file
+        f = 1 if (r == true and v == "") # empty required field
         if $settings.emailf.include? k
-          # email regex
-          if (not v == "") && v[/\A([\w+\-].?)+@[a-z\d\-]+(\.[a-z]+)*\.[a-z]+\z/i] == nil
-            f = 2 # error code for bad email format
-          end
+          f = 2 if v != "" and not v =~ emailformat
         end
+        f = 3 if $settings.botcatch.join == k #caught a bot
 
-        # "Prettify" the title - take out any HTML tag spacing punctuation and change to spaces, capitalize to make it more readable
+        # t variable - "Prettify" the title of the form field
         t = k.split(/[[:punct:]]/).map(&:capitalize).join(' ')
 
-        # assign the Pony "from" value
-        if $settings.f_from == k
-          from = v
-        end
-
-        # if Pony to value is assigned by form entry, assign the Pony "to" value
-        if $settings.f_to.include? k
-          to = v
-        end
-
-        # assign the Pony "subject" value
-        if $settings.f_subject.to_s == k
-          subject = v
-        end
-
-        # concatenate all body fields to the single Pony "body" value with line breaks and titles
-        if $settings.f_body.include? k
-          body << t + ": " + v + "\n"
-        end
+        # assign the Pony values, if they are form fields (body concatenates all body fields with line breaks)
+        from = v if $settings.f_from == k
+        to = v if $settings.f_to.include? k
+        subject = v if $settings.f_subject.to_s == k
+        body << t + ": " + v + "\n" if $settings.f_body.include? k
 
         # create a field object and add it to the $hashfields array using the method above
         field k,v,r,t,f
@@ -145,42 +86,40 @@ class Rbemail < Sinatra::Base
       end
 
       # if "from" value is an email address in the config, set "from"
-      if $settings.f_from[/\A([\w+\-].?)+@[a-z\d\-]+(\.[a-z]+)*\.[a-z]+\z/i] != nil
-        from = $settings.f_from
-      end
+      from = $settings.f_from if $settings.f_from =~ emailformat
+
+      # if "subject" value is hardcoded in the config, set "subject"
+      subject = $settings.f_subject.to_s if subject == ""
 
       # if the Pony "to" value is still unassigned (not a form field), assign Pony "to" field to string of email addresses in config file
       if to == ""
-        $settings.f_to.each do |x|
-          if not x[/\A([\w+\-].?)+@[a-z\d\-]+(\.[a-z]+)*\.[a-z]+\z/i] == nil
-            $tomails.push(x)
-          end
-        end
+        $settings.f_to.each { |x| $tomails.push(x) if x =~ emailformat }
         to = $tomails.join(",")
       end
 
-      ########################################
-      # WRITE TO JSON
-      ########################################
-
+      # write to json
       $j = $hashfields.to_json
 
+      # after all validation, kill or pass
+      $sendemail = true
 
-      ########################################
-      # AFTER ALL VALIDATION, KILL OR PASS
-      ########################################
+      $hashfields.each { |x| $sendemail = false if x.values[4] != 0 }
 
-      sendemail = true
-
-      $hashfields.each do |x|
-        if x.values[4] != 0
-          sendemail = false
-        end
-      end
-
-      if sendemail
-        Pony.mail({to: to,from: from,subject: subject,body: body,via: $settings.send_via,via_options: { address: $settings.smtp_address,port: $settings.smtp_port,user_name: $settings.smtp_user,password: $settings.smtp_pass,authentication: $settings.smtp_auth,domain: $settings.smtp_domain}})
-      end
+      Pony.mail({
+        to: to,
+        from: from,
+        subject: subject,
+        body: body,
+        via: $settings.send_via,
+        via_options: {
+          address: $settings.smtp_address,
+          port: $settings.smtp_port,
+          user_name: $settings.smtp_user,
+          password: $settings.smtp_pass,
+          authentication: $settings.smtp_auth,
+          domain: $settings.smtp_domain
+        }
+      }) if $sendemail
 
     end
 
