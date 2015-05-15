@@ -70,7 +70,7 @@ Set up dev environment:
   * FIELDARRAY: only necessary if your form fields are in an array, like the example below:
     ```
   <input name="example_fieldarray[example_name]" />
-  ```
+  ```  
     If your fields are not in this format, set `FIELDARRAY = ""`
   * REQUIRED: a list of all required fields in your form, separated by spaces
 
