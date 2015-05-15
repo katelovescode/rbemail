@@ -145,7 +145,9 @@ Set up dev environment:
 
 1. Using your text editor of choice, configure `.env.development` with your specific form fields (see dev environment instructions for explanation)  
 
+    ```
     TODO: Sunil - please expand on this - docker implementation? etc.  Phusion Passenger?
+    ```
 
 1. Configure client-side to interact (see `public/examples` for some implementation examples based on different client-side environments)  
 
