@@ -16,25 +16,6 @@ class Rbemail < Sinatra::Base
   set :port, 9393
   set :root, File.expand_path("..", File.dirname(__FILE__))
 
-  ########################################
-  # TESTING ERB TEMPLATES W/ FORMS - USING BROWSER
-  ########################################
-
-  # get '/' do
-  #   # this is for testing non-drupal form names
-  #   # erb :email_form
-  #
-  #   erb :drupal_form
-  # end
-
-  ########################################
-  # FORM POST ACTION
-  ########################################
-
-  # get '/' do
-  #   "hello world"
-  # end
-
   # upon posting a form at the root page
   post '/' do
     cross_origin
@@ -94,14 +75,11 @@ class Rbemail < Sinatra::Base
       # loop through the form variable and add in required and title elements
       form.each do |k,v|
 
-        # initialize f for passing or error codes
-        f = 0
-
         # true if this is in the required list
         r = $settings.required.include? k
 
         # error codes
-
+        f = 0
         f = 1 if (r == true and v == "") # empty required field
         if $settings.emailf.include? k
           f = 2 if v != "" and not v =~ emailformat
