@@ -44,7 +44,7 @@ The SMTP mail server for our current configuration is Amazon SES.  We created ne
 #### [RBEMAIL SERVER]
 The rbemail instance is run in a cluster of Docker containers.  
 
-    ## TODO: Sunil - please expand on this.
+    TODO: Sunil - please expand on this.
 
 ### Production Implementation
 
@@ -52,7 +52,7 @@ The rbemail instance is run in a cluster of Docker containers.
 
 Rbemail currently lives on a cluster of Docker containers
 
-    ## TODO: Sunil - please expand on this.
+    TODO: Sunil - please expand on this.
 
 ## For developers
 
@@ -71,8 +71,8 @@ Set up dev environment:
 1. Using your text editor of choice, configure `.env.development` with your specific form fields:  
   * FIELDARRAY: only necessary if your form fields are in an array, like the example below (if not, set `FIELDARRAY = ""`):
     ```
-  <input name="example_fieldarray[example_name]" />
-  ```  
+    <input name="example_fieldarray[example_name]" />
+    ```  
 
   * REQUIRED: a list of all required fields in your form, separated by spaces
 
@@ -91,11 +91,11 @@ Set up dev environment:
   * F_SUBJECT: this can be either the hard-coded subject line (e.g. "Contact Form from Website"), or the field name in the form if the user will be manually entering a subject
 
   * F_BODY: this is a list of field names that should be included in the body of the email, separated by spaces.  The app will output them into the body with the field name prettified & prepended, like the example below:
-  ```
-  Example Name: Joe McGee  
-  Example Message: Hey guys, nice website.  
-  Example Rating: 4
-  ```
+    ```
+    Example Name: Joe McGee  
+    Example Message: Hey guys, nice website.  
+    Example Rating: 4
+    ```
   **PONY CONFIG FIELDS**
 
   * SEND_VIA: standard is smtp (must be in lowercase) - for additional options and their specific configurations, see the Pony gem documentation at https://github.com/benprew/pony
@@ -145,7 +145,7 @@ Set up dev environment:
 
 1. Using your text editor of choice, configure `.env.development` with your specific form fields (see dev environment instructions for explanation)  
 
-    ## TODO: Sunil - please expand on this - docker implementation? etc.  Phusion Passenger?
+    TODO: Sunil - please expand on this - docker implementation? etc.  Phusion Passenger?
 
 1. Configure client-side to interact (see `public/examples` for some implementation examples based on different client-side environments)  
 
