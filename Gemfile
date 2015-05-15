@@ -16,4 +16,6 @@ group :development, :test do
   gem 'rspec'
   gem 'rack-test'
   gem 'mailcatcher'
+  gem 'simplecov', require: false
+  gem 'simplecov-rcov', require: false
 end

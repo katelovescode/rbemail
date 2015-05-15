@@ -1,3 +1,10 @@
+require 'simplecov'
+require 'simplecov-rcov'
+SimpleCov.formatters = [
+  SimpleCov::Formatter::HTMLFormatter,
+  SimpleCov::Formatter::RcovFormatter
+]
+SimpleCov.start
 
 require 'rubygems'
 require 'rspec'
@@ -14,4 +21,3 @@ RSpec.configure do |config|
   # config.mock_framework = :flexmock
   # config.mock_framework = :rr
 end
-
