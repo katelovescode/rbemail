@@ -106,14 +106,14 @@ Set up dev environment:
 1. Configure client-side *(see `public/examples` for some implementation examples based on different client-side environments)*
   > **FOR SIMPLE DEVELOPMENT**  
 
-  >With Sinatra already installed, you can use erb views to serve your form.  Just add a Sinatra get command such as the following to `rbemail.rb`, before the `post` command:
+  >With Sinatra already installed, you can use erb views to serve your form.  Just add a Sinatra get method such as the following to `rbemail.rb`, before the `post` method:
   ```
   # if developing a form
   get '/' do
     erb :index
   end
   ```
-  Then create your form in `views/index.erb` - currently, there is no command to change the view after post; in our Drupal example under "public", the Drupal module handles this.  If you want to redirect the view after post, you'll need another erb command at the end of the script
+  Then create your form in `views/index.erb` - currently, there is no method to change the view after post; in our Drupal example under "public", the Drupal module handles this.  If you want to redirect the view after post, you'll need another erb command at the end of the post method
 
 1. Navigate to the project directory and run mailcatcher: `mailcatcher`
 1. Fire up the app inside the project directory using shotgun: `shotgun config.ru`
