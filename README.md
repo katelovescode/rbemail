@@ -139,12 +139,11 @@ Then create your form in `views/index.erb` - currently, there is no method to ch
 1. For testing, quit mailcatcher in the browser and run `bundle exec rspec`
 
 ### Deployment
-1. Develop your form using html or erb views
-1. Clone **rbemail** to your local machine
+1. Copy **rbemail** and any relevant views to your production server
 1. `cd path/to/rbemail`
 1. If you're using rvm in your production environment, a gemset should automatically generate
 1. `bundle install`
-1. Using your text editor of choice, configure `.env.development` with your
+1. Using your text editor of choice, configure `.env.production` with your
    specific form fields (see dev environment instructions for explanation)
 
         TODO: Sunil - please expand on this - docker implementation? etc.  Phusion Passenger?
