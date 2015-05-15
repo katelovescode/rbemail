@@ -91,17 +91,17 @@ Set up dev environment:
   ```
   **PONY CONFIG FIELDS**
 
-    * SEND_VIA: standard is smtp (must be in lowercase) - for additional options and their specific configurations, see the Pony gem documentation at https://github.com/benprew/pony
+  * SEND_VIA: standard is smtp (must be in lowercase) - for additional options and their specific configurations, see the Pony gem documentation at https://github.com/benprew/pony
 
-    * SMTP_ADDRESS: address of your smtp server (if using mailcatcher as included in the **rbemail** app, use `"localhost"`)
+  * SMTP_ADDRESS: address of your smtp server (if using mailcatcher as included in the **rbemail** app, use `"localhost"`)
 
-    * SMTP_PORT: port used for your smtp server (use `"1025"` with mailcatcher)
+  * SMTP_PORT: port used for your smtp server (use `"1025"` with mailcatcher)
 
-    * SMTP_USER & SMTP_PASS: username & password for your smtp server (use `""` for both with mailcatcher)
+  * SMTP_USER & SMTP_PASS: username & password for your smtp server (use `""` for both with mailcatcher)
 
-    * SMTP_AUTH: smtp authorization method (use `"plain"` with mailcatcher)
+  * SMTP_AUTH: smtp authorization method (use `"plain"` with mailcatcher)
 
-    * SMTP_DOMAIN: your domain name (use anything with mailcatcher)
+  * SMTP_DOMAIN: your domain name (use anything with mailcatcher)
 
 1. Configure client-side *(see `public/examples` for some implementation examples based on different client-side environments)*  
   > **FOR SIMPLE DEVELOPMENT**  
