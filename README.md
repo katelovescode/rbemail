@@ -137,6 +137,7 @@ Then create your form in `views/index.erb` - currently, there is no method to ch
 1. Navigate to `localhost:9393` (or wherever your form is) and test it out (to test from the command line instead, with no view in place, use one of the `curl` commands in the .env.development file as a template for testing)
 1. Navigate to `localhost:1080` to view caught mails sent from your form
 1. For testing, quit mailcatcher in the browser and run `bundle exec rspec`
+
 ### Deployment
 1. Develop your form using html or erb views
 1. Clone **rbemail** to your local machine
