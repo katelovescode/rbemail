@@ -8,10 +8,16 @@ SimpleCov.start
 
 require 'rubygems'
 require 'rspec'
-
-require File.expand_path('../../lib/rbemail', __FILE__)
+require 'rbemail'
+require 'rack/test'
 
 RSpec.configure do |config|
+  include Rack::Test::Methods
+
+  def app
+    Rbemail
+  end
+
   # == Mock Framework
   #
   # RSpec uses it's own mocking framework by default. If you prefer to
