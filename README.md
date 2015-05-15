@@ -68,9 +68,9 @@ Set up dev environment:
   > #### EMAIL FORM CONFIG FIELDS
   >
   > - FIELDARRAY: only necessary if your form fields are in an array, like the example below (if not, set `FIELDARRAY = ""`):
-  >     <input name="example_fieldarray[example_name]" />
-  > - REQUIRED: a list of all required fields in your form, separated by spaces
-  > - OPTIONAL: a list of all optional fields in your form, separated by spaces
+  >     <input name="example_fieldarray[example_name]" />  
+  > - REQUIRED: a list of all required fields in your form, separated by spaces  
+  > - OPTIONAL: a list of all optional fields in your form, separated by spaces  
   >   > Note: all of your form fields (except BOTCATCH) must be in either REQUIRED or OPTIONAL, or the script will exit with an error; this is the only developer error passed.  All other errors are passed into the data to be dealt with using JS or your preferred front-end handler  
   >
   > - EMAILF: put any field names here that contain emails you want to check for format (usually just the sender's email)
@@ -79,10 +79,11 @@ Set up dev environment:
   > - F_FROM: this can be either one hard-coded email address, or the field name in the form if the user will be manually entering their "from" email
   > - F_SUBJECT: this can be either the hard-coded subject line (e.g. "Contact Form from Website"), or the field name in the form if the user will be manually entering a subject
   > - F_BODY: this is a list of field names that should be included in the body of the email, separated by spaces.  The app will output them into the body with the field name prettified & prepended, like the example below:  
+  >     ```
   >     Example Name: Joe McGee  
   >     Example Message: Hey guys, nice website.  
   >     Example Rating: 4
-  >
+  >     ```
   > #### PONY CONFIG FIELDS
   >
   > - SEND_VIA: standard is smtp (must be in lowercase) - for additional options and their specific configurations, see the Pony gem documentation at https://github.com/benprew/pony
