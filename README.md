@@ -113,7 +113,7 @@ Set up dev environment:
     erb :index
   end
   ```
-  Then create your form in `views/index.erb`
+  Then create your form in `views/index.erb` - currently, there is no command to change the view after post; in our Drupal example under "public", the Drupal module handles this.  If you want to redirect the view after post, you'll need another erb command at the end of the script
 
 1. Navigate to the project directory and run mailcatcher: `mailcatcher`
 1. Fire up the app inside the project directory using shotgun: `shotgun config.ru`
