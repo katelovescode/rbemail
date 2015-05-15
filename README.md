@@ -65,7 +65,7 @@ Set up dev environment:
 1. `bundle install`  
 1. Using your text editor of choice, configure `.env.development` with your specific form fields:
 
-  > ### EMAIL FORM CONFIG FIELDS
+  > #### EMAIL FORM CONFIG FIELDS
   >
   > - FIELDARRAY: only necessary if your form fields are in an array, like the example below (if not, set `FIELDARRAY = ""`):
   >     <input name="example_fieldarray[example_name]" />
@@ -83,7 +83,7 @@ Set up dev environment:
   >     Example Message: Hey guys, nice website.  
   >     Example Rating: 4
   >
-  > ### PONY CONFIG FIELDS
+  > #### PONY CONFIG FIELDS
   >
   > - SEND_VIA: standard is smtp (must be in lowercase) - for additional options and their specific configurations, see the Pony gem documentation at https://github.com/benprew/pony
   > - SMTP_ADDRESS: address of your smtp server (if using mailcatcher as included in the **rbemail** app, use `"localhost"`)
@@ -93,15 +93,13 @@ Set up dev environment:
   > - SMTP_DOMAIN: your domain name (use anything with mailcatcher)  
 
 1. Configure client-side *(see `public/examples` for some implementation examples based on different client-side environments)*  
-  > # FOR SIMPLE DEVELOPMENT
-  >With Sinatra already installed, you can use erb views to serve your form.  Just add a Sinatra get method such as the following to `rbemail.rb`, before the `post` method:
-  ```
-  # if developing a form
-  get '/' do
-    erb :index
-  end
-  ```
-  Then create your form in `views/index.erb` - currently, there is no method to change the view after post; in our Drupal example under "public", the Drupal module handles this.  If you want to redirect the view after post, you'll need another erb command at the end of the post method  
+  > #### FOR SIMPLE DEVELOPMENT
+  > With Sinatra already installed, you can use erb views to serve your form.  Just add a Sinatra get method such as the following to `rbemail.rb`, before the `post` method:
+  >     # if developing a form
+  >     get '/' do
+  >       erb :index
+  >     end
+  > Then create your form in `views/index.erb` - currently, there is no method to change the view after post; in our Drupal example under "public", the Drupal module handles this.  If you want to redirect the view after post, you'll need another erb command at the end of the post method  
 
 1. Navigate to the project directory and run mailcatcher: `mailcatcher`  
 1. Fire up the app inside the project directory using shotgun: `shotgun config.ru`  
