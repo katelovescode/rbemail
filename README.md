@@ -55,11 +55,17 @@ Rbemail currently lives on a cluster of Docker containers
 ## For developers
 
 Set up dev environment:  
+
 1. Develop your form using html or erb views  
+
 1. Clone **rbemail** to your local machine  
+
 1. `cd path/to/rbemail`  
+
 1. If you're using rvm, a gemset should automatically generate  
+
 1. `bundle install`  
+
 1. Using your text editor of choice, configure `.env.development` with your specific form fields:  
   * FIELDARRAY: only necessary if your form fields are in an array, like the example below:
     ```
