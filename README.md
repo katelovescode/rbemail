@@ -67,11 +67,11 @@ Set up dev environment:
 1. `bundle install`  
 
 1. Using your text editor of choice, configure `.env.development` with your specific form fields:  
-  * FIELDARRAY: only necessary if your form fields are in an array, like the example below:
+  * FIELDARRAY: only necessary if your form fields are in an array, like the example below (if not, set `FIELDARRAY = ""`):
     ```
   <input name="example_fieldarray[example_name]" />
   ```  
-    If your fields are not in this format, set `FIELDARRAY = ""`
+
   * REQUIRED: a list of all required fields in your form, separated by spaces
 
   * OPTIONAL: a list of all optional fields in your form, separated by spaces
