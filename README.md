@@ -96,7 +96,7 @@ Set up dev environment:
     Example Message: Hey guys, nice website.  
     Example Rating: 4
     ```  
-  **PONY CONFIG FIELDS**
+**PONY CONFIG FIELDS**
 
   * SEND_VIA: standard is smtp (must be in lowercase) - for additional options and their specific configurations, see the Pony gem documentation at https://github.com/benprew/pony
 
