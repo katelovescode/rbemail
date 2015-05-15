@@ -4,10 +4,12 @@ require 'ostruct'
 module Config
 
   def load_config
-    if defined?(ENV['RACK_ENV'])
-      dotenvfile1 = ".env.#{ENV['RACK_ENV']}"
-      Dotenv.load dotenvfile1
+    unless defined?(ENV['RACK_ENV'])
+      ENV['RACK_ENV'] = "production"
     end
+
+    dotenvfile1 = ".env.#{ENV['RACK_ENV']}"
+    Dotenv.load dotenvfile1
 
     settings = {}
 
@@ -40,7 +42,7 @@ module Config
     settings[:smtp_domain] = ENV['SMTP_DOMAIN'].chomp('"').reverse.chomp('"').reverse
 
     $settings = OpenStruct.new settings
-    
+
   end
 
   def change_config(key, value)

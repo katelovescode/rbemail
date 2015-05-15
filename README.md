@@ -59,10 +59,11 @@ Set up dev environment:
 1. `cd path/to/project`
 1. If you're using rvm, a gemset should automatically generate at the previous step
 1. `bundle install`
-1. `cp lib/environment_variables.list.sample lib/environment_variables.list`
+1. `cp .env.production.example .env.production`
 1. Using your text editor of choice, configure `environment_variables.list` with your specific form fields and SMTP server *(e.g the mock SMTP server you set up)*
 1. Add ENV variables to your local session *(this command works in Ubuntu 14.10 - ymmv, but if done this way, you must do this every time you open a new shell, before you run the app):* `. <(sed '/^export/!s/^/export /' "lib/environment_variables.list")`
 1. Configure client-side *(see `public/examples` for some implementation examples based on different client-side environments)*
+  1. When developing a form, you can use the
 1. Fire up the app inside the project directory using shotgun: `shotgun lib/rbemail.rb`
 1. Navigate to `localhost:9393` (or wherever your form is) and test it out
 
@@ -71,7 +72,7 @@ Set up dev environment:
 1. `cd path/to/project`
 1. If you're using rvm, a gemset should automatically generate at the previous step
 1. `bundle install`
-1. `cp lib/environment_variables.list.sample lib/environment_variables.list`
+1. `cp .env.production.example .env.production`
 1. Using your text editor of choice, configure `environment_variables.list` with your specific form fields and live SMTP server
 1. Run environment variables `sed` command as listed above
 <p style="color:red;font-size:18px">TODO: Sunil - please expand on this - docker implementation? etc.</p>
