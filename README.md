@@ -72,8 +72,7 @@ Set up dev environment:
   * FIELDARRAY: only necessary if your form fields are in an array, like the example below (if not, set `FIELDARRAY = ""`):
     ```
     <input name="example_fieldarray[example_name]" />
-    ```  
-
+    ```
   * REQUIRED: a list of all required fields in your form, separated by spaces
 
   * OPTIONAL: a list of all optional fields in your form, separated by spaces
@@ -95,8 +94,8 @@ Set up dev environment:
     Example Name: Joe McGee  
     Example Message: Hey guys, nice website.  
     Example Rating: 4
-    ```  
-**PONY CONFIG FIELDS**
+    ```
+    **PONY CONFIG FIELDS**
 
   * SEND_VIA: standard is smtp (must be in lowercase) - for additional options and their specific configurations, see the Pony gem documentation at https://github.com/benprew/pony
 
