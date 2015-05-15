@@ -71,6 +71,7 @@ Set up dev environment:
   >     <input name="example_fieldarray[example_name]" />  
   > - REQUIRED: a list of all required fields in your form, separated by spaces  
   > - OPTIONAL: a list of all optional fields in your form, separated by spaces  
+  > 
   >   > Note: all of your form fields (except BOTCATCH) must be in either REQUIRED or OPTIONAL, or the script will exit with an error; this is the only developer error passed.  All other errors are passed into the data to be dealt with using JS or your preferred front-end handler  
   >
   > - EMAILF: put any field names here that contain emails you want to check for format (usually just the sender's email)
