@@ -78,7 +78,7 @@ Set up dev environment:
   > - F_TO: this can be either a hard-coded email address, a list of email addresses separated by spaces, or a the field name in the form if the user will be selecting or entering email addresses manually
   > - F_FROM: this can be either one hard-coded email address, or the field name in the form if the user will be manually entering their "from" email
   > - F_SUBJECT: this can be either the hard-coded subject line (e.g. "Contact Form from Website"), or the field name in the form if the user will be manually entering a subject
-  > - F_BODY: this is a list of field names that should be included in the body of the email, separated by spaces.  The app will output them into the body with the field name prettified & prepended, like the example below:
+  > - F_BODY: this is a list of field names that should be included in the body of the email, separated by spaces.  The app will output them into the body with the field name prettified & prepended, like the example below:  
   >     Example Name: Joe McGee  
   >     Example Message: Hey guys, nice website.  
   >     Example Rating: 4
