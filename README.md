@@ -64,6 +64,7 @@ Set up dev environment:
 1. If you're using rvm, a gemset should automatically generate  
 1. `bundle install`  
 1. Using your text editor of choice, configure `.env.development` with your specific form fields:  
+
   * FIELDARRAY: only necessary if your form fields are in an array, like the example below (if not, set `FIELDARRAY = ""`):
     ```
     <input name="example_fieldarray[example_name]" />
