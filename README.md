@@ -54,7 +54,7 @@ Rbemail currently lives on a cluster of Docker containers
 
 ## For developers
 
-Set up dev environment:
+Set up dev environment:  
 1. Develop your form using html or erb views  
 1. Clone **rbemail** to your local machine  
 1. `cd path/to/rbemail`  
