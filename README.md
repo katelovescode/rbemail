@@ -71,8 +71,7 @@ Set up dev environment:
     ```
   <input name="example_fieldarray[example_name]" />
   ```
-
-  If your fields are not in this format, set `FIELDARRAY = ""`
+    If your fields are not in this format, set `FIELDARRAY = ""`
   * REQUIRED: a list of all required fields in your form, separated by spaces
 
   * OPTIONAL: a list of all optional fields in your form, separated by spaces
