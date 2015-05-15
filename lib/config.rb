@@ -4,12 +4,10 @@ require 'ostruct'
 module Config
 
   def load_config
-    unless defined?(ENV['RACK_ENV'])
-      ENV['RACK_ENV'] = "production"
+    if defined?(ENV['RACK_ENV'])
+      dotenvfile1 = ".env.#{ENV['RACK_ENV']}"
+      Dotenv.load dotenvfile1
     end
-
-    dotenvfile1 = ".env.#{ENV['RACK_ENV']}"
-    Dotenv.load dotenvfile1
 
     settings = {}
 

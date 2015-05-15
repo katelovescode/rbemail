@@ -6,6 +6,7 @@ gem 'pony'
 gem 'mail'
 gem 'mime-types'
 gem 'json'
+gem 'dotenv'
 
 group :development do
   gem 'shotgun'
@@ -15,5 +16,4 @@ group :development, :test do
   gem 'rspec'
   gem 'rack-test'
   gem 'mailcatcher'
-  gem 'dotenv'
 end

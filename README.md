@@ -23,6 +23,10 @@ Gems:
 - mime-types
 - json
 - shotgun (dev only)
+- rspec (dev & test only)
+- rack-test (dev & test only)
+- mailcatcher (dev & test only)
+- dotenv
 
 ## Reference implementation
 
@@ -51,31 +55,80 @@ Rbemail currently lives on a cluster of Docker containers
 ## For developers
 
 Set up dev environment:
-1. Develop your form using html
-1. Set up an SMTP server
-  1. Recommended: install and run a local SMTP server/mock server *(e.g. FakeSMTP)*
-  1. Alternative: set up a 3rd part SMTP server *(Amazon SES, etc.)*
+1. Develop your form using html or erb views
 1. Clone **rbemail** to your local machine
-1. `cd path/to/project`
-1. If you're using rvm, a gemset should automatically generate at the previous step
+1. `cd path/to/rbemail`
+1. If you're using rvm, a gemset should automatically generate
 1. `bundle install`
-1. `cp .env.production.example .env.production`
-1. Using your text editor of choice, configure `environment_variables.list` with your specific form fields and SMTP server *(e.g the mock SMTP server you set up)*
-1. Add ENV variables to your local session *(this command works in Ubuntu 14.10 - ymmv, but if done this way, you must do this every time you open a new shell, before you run the app):* `. <(sed '/^export/!s/^/export /' "lib/environment_variables.list")`
+1. Using your text editor of choice, configure `.env.development` with your specific form fields:
+  * FIELDARRAY: only necessary if your form fields are in an array, like the example below:
+    ```
+  <input name="example_fieldarray[example_name]" />
+  ```
+
+  If your fields are not in this format, set `FIELDARRAY = ""`
+  * REQUIRED: a list of all required fields in your form, separated by spaces
+
+  * OPTIONAL: a list of all optional fields in your form, separated by spaces
+
+    > Note: all of your form fields (except BOTCATCH) must be in either REQUIRED or OPTIONAL, or the script will exit with an error; this is the only developer error passed.  All other errors are passed into the data to be dealt with using JS or your preferred front-end handler
+
+  * EMAILF: put any field names here that contain emails you want to check for format (usually just the sender's email)
+
+  * BOTCATCH: if you have a hidden field that should **not** be filled out and is used to catch bot form fills, put the field name here, otherise set `BOTCATCH = ""`
+
+  * F_TO: this can be either a hard-coded email address, a list of email addresses separated by spaces, or a the field name in the form if the user will be selecting or entering email addresses manually
+
+  * F_FROM: this can be either one hard-coded email address, or the field name in the form if the user will be manually entering their "from" email
+
+  * F_SUBJECT: this can be either the hard-coded subject line (e.g. "Contact Form from Website"), or the field name in the form if the user will be manually entering a subject
+
+  * F_BODY: this is a list of field names that should be included in the body of the email, separated by spaces.  The app will output them into the body with the field name prettified & prepended, like the example below:
+  ```
+  Example Name: Joe McGee  
+  Example Message: Hey guys, nice website.  
+  Example Rating: 4
+  ```
+  **PONY CONFIG FIELDS**
+
+    * SEND_VIA: standard is smtp (must be in lowercase) - for additional options and their specific configurations, see the Pony gem documentation at https://github.com/benprew/pony
+
+    * SMTP_ADDRESS: address of your smtp server (if using mailcatcher as included in the **rbemail** app, use `"localhost"`)
+
+    * SMTP_PORT: port used for your smtp server (use `"1025"` with mailcatcher)
+
+    * SMTP_USER & SMTP_PASS: username & password for your smtp server (use `""` for both with mailcatcher)
+
+    * SMTP_AUTH: smtp authorization method (use `"plain"` with mailcatcher)
+
+    * SMTP_DOMAIN: your domain name (use anything with mailcatcher)
+
 1. Configure client-side *(see `public/examples` for some implementation examples based on different client-side environments)*
-  1. When developing a form, you can use the
-1. Fire up the app inside the project directory using shotgun: `shotgun lib/rbemail.rb`
-1. Navigate to `localhost:9393` (or wherever your form is) and test it out
+  > **FOR SIMPLE DEVELOPMENT**  
+
+  >With Sinatra already installed, you can use erb views to serve your form.  Just add a Sinatra get command such as the following to `rbemail.rb`, before the `post` command:
+  ```
+  # if developing a form
+  get '/' do
+    erb :index
+  end
+  ```
+  Then create your form in `views/index.erb`
+
+1. Navigate to the project directory and run mailcatcher: `mailcatcher`
+1. Fire up the app inside the project directory using shotgun: `shotgun config.ru`
+1. Navigate to `localhost:9393` (or wherever your form is) and test it out (to test from the command line instead, with no view in place, use one of the `curl` commands in the .env.development file as a template for testing)
+1. Navigate to `localhost:1025` to view caught mails sent from your form
+1. For testing, run `bundle exec rspec`
 
 ### Deployment
-1. Clone **rbemail** to your server
-1. `cd path/to/project`
-1. If you're using rvm, a gemset should automatically generate at the previous step
+1. Develop your form using html or erb views
+1. Clone **rbemail** to your local machine
+1. `cd path/to/rbemail`
+1. If you're using rvm in your production environment, a gemset should automatically generate
 1. `bundle install`
-1. `cp .env.production.example .env.production`
-1. Using your text editor of choice, configure `environment_variables.list` with your specific form fields and live SMTP server
-1. Run environment variables `sed` command as listed above
-<p style="color:red;font-size:18px">TODO: Sunil - please expand on this - docker implementation? etc.</p>
+1. Using your text editor of choice, configure `.env.development` with your specific form fields (see dev environment instructions for explanation)
+<p style="color:red;font-size:18px">TODO: Sunil - please expand on this - docker implementation? etc.  Phusion Passenger?</p>
 1. Configure client-side to interact (see `public/examples` for some implementation examples based on different client-side environments)
 1. Test
 1. Enjoy!
