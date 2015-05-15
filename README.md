@@ -63,36 +63,40 @@ Set up dev environment:
 1. `cd path/to/rbemail`  
 1. If you're using rvm, a gemset should automatically generate  
 1. `bundle install`  
-1. Using your text editor of choice, configure `.env.development` with your specific form fields:  
+1. Using your text editor of choice, configure `.env.development` with your specific form fields:
 
-  * FIELDARRAY: only necessary if your form fields are in an array, like the example below (if not, set `FIELDARRAY = ""`):
-    ```
-    <input name="example_fieldarray[example_name]" />
-    ```
-  * REQUIRED: a list of all required fields in your form, separated by spaces
-  * OPTIONAL: a list of all optional fields in your form, separated by spaces
-    > Note: all of your form fields (except BOTCATCH) must be in either REQUIRED or OPTIONAL, or the script will exit with an error; this is the only developer error passed.  All other errors are passed into the data to be dealt with using JS or your preferred front-end handler
+### EMAIL FORM CONFIG FIELDS
 
-  * EMAILF: put any field names here that contain emails you want to check for format (usually just the sender's email)
-  * BOTCATCH: if you have a hidden field that should **not** be filled out and is used to catch bot form fills, put the field name here, otherise set `BOTCATCH = ""`
-  * F_TO: this can be either a hard-coded email address, a list of email addresses separated by spaces, or a the field name in the form if the user will be selecting or entering email addresses manually
-  * F_FROM: this can be either one hard-coded email address, or the field name in the form if the user will be manually entering their "from" email
-  * F_SUBJECT: this can be either the hard-coded subject line (e.g. "Contact Form from Website"), or the field name in the form if the user will be manually entering a subject
-  * F_BODY: this is a list of field names that should be included in the body of the email, separated by spaces.  The app will output them into the body with the field name prettified & prepended, like the example below:
-    ```
-    Example Name: Joe McGee  
-    Example Message: Hey guys, nice website.  
-    Example Rating: 4
-    ```
-    **PONY CONFIG FIELDS**
-  * SEND_VIA: standard is smtp (must be in lowercase) - for additional options and their specific configurations, see the Pony gem documentation at https://github.com/benprew/pony
-  * SMTP_ADDRESS: address of your smtp server (if using mailcatcher as included in the **rbemail** app, use `"localhost"`)
-  * SMTP_PORT: port used for your smtp server (use `"1025"` with mailcatcher)
-  * SMTP_USER & SMTP_PASS: username & password for your smtp server (use `""` for both with mailcatcher)
-  * SMTP_AUTH: smtp authorization method (use `"plain"` with mailcatcher)
-  * SMTP_DOMAIN: your domain name (use anything with mailcatcher)
+  - FIELDARRAY: only necessary if your form fields are in an array, like the example below (if not, set `FIELDARRAY = ""`):
+      <input name="example_fieldarray[example_name]" />
+  - REQUIRED: a list of all required fields in your form, separated by spaces
+  - OPTIONAL: a list of all optional fields in your form, separated by spaces
+    > Note: all of your form fields (except BOTCATCH) must be in either
+    > REQUIRED or OPTIONAL, or the script will exit with an error;
+    > this is the only developer error passed.  All other errors are
+    > passed into the data to be dealt with using JS or your preferred
+    > front-end handler  
+
+  - EMAILF: put any field names here that contain emails you want to check for format (usually just the sender's email)
+  - BOTCATCH: if you have a hidden field that should **not** be filled out and is used to catch bot form fills, put the field name here, otherise set `BOTCATCH = ""`
+  - F_TO: this can be either a hard-coded email address, a list of email addresses separated by spaces, or a the field name in the form if the user will be selecting or entering email addresses manually
+  - F_FROM: this can be either one hard-coded email address, or the field name in the form if the user will be manually entering their "from" email
+  - F_SUBJECT: this can be either the hard-coded subject line (e.g. "Contact Form from Website"), or the field name in the form if the user will be manually entering a subject
+  - F_BODY: this is a list of field names that should be included in the body of the email, separated by spaces.  The app will output them into the body with the field name prettified & prepended, like the example below:
+      Example Name: Joe McGee  
+      Example Message: Hey guys, nice website.  
+      Example Rating: 4
+
+### PONY CONFIG FIELDS
+
+  - SEND_VIA: standard is smtp (must be in lowercase) - for additional options and their specific configurations, see the Pony gem documentation at https://github.com/benprew/pony
+  - SMTP_ADDRESS: address of your smtp server (if using mailcatcher as included in the **rbemail** app, use `"localhost"`)
+  - SMTP_PORT: port used for your smtp server (use `"1025"` with mailcatcher)
+  - SMTP_USER & SMTP_PASS: username & password for your smtp server (use `""` for both with mailcatcher)
+  - SMTP_AUTH: smtp authorization method (use `"plain"` with mailcatcher)
+  - SMTP_DOMAIN: your domain name (use anything with mailcatcher)
 1. Configure client-side *(see `public/examples` for some implementation examples based on different client-side environments)*  
-  > **FOR SIMPLE DEVELOPMENT**  
+  > # FOR SIMPLE DEVELOPMENT
   >With Sinatra already installed, you can use erb views to serve your form.  Just add a Sinatra get method such as the following to `rbemail.rb`, before the `post` method:
   ```
   # if developing a form
