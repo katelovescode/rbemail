@@ -1,2 +1,3 @@
 views/*
-lib/environment_variables.list
+.env.production
+coverage
